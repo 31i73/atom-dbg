@@ -1,0 +1,23 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    { label: 'Toggle breakpoint here', command: 'dbg:toggle-breakpoint' }
+  ]
+menu: [
+  {
+    label: 'Packages'
+    submenu: [
+      label: 'Debug'
+      submenu: [
+        { label: 'Continue / Pause', command: 'dbg:pause-continue' }
+        { label: 'Step Over', command: 'dbg:stepOver' }
+        { label: 'Step in', command: 'dbg:stepIn' }
+        { label: 'Step Out', command: 'dbg:stepOut' }
+        { label: 'Stop debugging', command: 'dbg:stop' }
+        { type: 'separator' }
+        { label: 'Toggle breakpoint on current line', command: 'dbg:toggle-breakpoint' }
+        { label: 'Clear all breakpoints', command: 'dbg:clear-breakpoints' }
+      ]
+    ]
+  }
+]

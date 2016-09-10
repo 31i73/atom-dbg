@@ -1,0 +1,30 @@
+{
+  "name": "dbg",
+  "main": "./lib/main",
+  "version": "0.0.0",
+  "description": "An interactive debugger frontend",
+  "keywords": [
+  ],
+  "repository": "https://github.com/31i73/atom-dbg",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+  },
+  "providedServices": {
+    "dbg": {
+			"description": "Provides debug support in Atom",
+			"versions": {
+				"0.1.0": "provideDbg"
+			}
+		}
+  },
+  "consumedServices": {
+		"dbgProvider": {
+			"versions": {
+				"^0.1.0": "consumeDbgProvider"
+			}
+		}
+	}
+}

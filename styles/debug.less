@@ -1,0 +1,98 @@
+// The ui-variables file is provided by base themes provided by Atom.
+//
+// See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
+// for a full listing of what's available.
+@import "ui-variables";
+
+.debug {
+}
+
+atom-text-editor::shadow {
+	.debug-breakpoint {
+		width: 1em;
+		text-align: center;
+
+		&:after {
+			display: inline-block;
+			vertical-align: middle;
+			width: 0.9em;
+			height: 0.9em;
+			content: "";
+			background: @background-color-error;
+			border-radius: 50%;
+			margin-top: -2px;
+		}
+	}
+	.line-number.debug-position,
+	.line-number.debug-position-error {
+		position: relative;
+		color: @text-color-warning;
+		overflow: hidden;
+		border-radius: @component-border-radius;
+		&:after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			right: 0px;
+			margin-top: -100px;
+			border-left: 100px solid fade(@background-color-warning, 50%);
+			border-top: 100px solid transparent;
+			border-bottom: 100px solid transparent;
+		}
+	}
+	.line-number.debug-position-error {
+		color: @text-color-error;
+		&:after {
+			border-left: 100px solid fade(@background-color-error, 50%);
+		}
+	}
+	.line.debug-position,
+	.line.debug-position-error {
+		border-radius: @component-border-radius;
+		background: fade(@background-color-warning, 20%);
+	}
+	.line.debug-position-error {
+		background: fade(@background-color-error, 20%);
+	}
+}
+
+.debug-toolbar {
+	padding: @component-padding / 2;
+	border-bottom: 1px solid @base-border-color;
+
+	.btn .icon {
+		display: inline-block;
+		width: 17px;
+    height: 19px;
+    fill: currentColor;
+    vertical-align: middle;
+		margin-top: -2px;
+	}
+}
+
+.debug-sidebar {
+	display: flex;
+	flex-direction: column;
+	width: 350px;
+	.inset-panel {
+		overflow: auto;
+		+ .inset-panel {
+			margin-top: @component-padding;
+		}
+		.panel-heading {
+			.options {
+				float: right;
+			}
+		}
+	}
+	.list-item {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+@media (max-width: 1000px) {
+	.debug-sidebar {
+		width: 250px;
+	}
+}
