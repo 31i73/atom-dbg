@@ -107,7 +107,8 @@ To create a dbg provider provide a `dbgProvider` service with the following prop
 >>> Each `Frame` should have the following properties:  
 >>>> `name` - The friendly name of this location (`"main()"` etc)  
 >>>> `local:Bool` - Specifes if the location is locally accessible, or a system location (hidden by default unless at the top of the stack)  
->>>> `path` - The absolute or relative filepath  
+>>>> `file` - Optional. The absolute file path
+>>>> `path` - The displayed technical path  (`file.c:4`, `file.so:xbaadf00d` etc)
 >>>> `line` - The line number (1-based)  
 
 >>> `setVariables(variables:Variable[])` - The list of variables visible in the currently active frame

@@ -224,8 +224,9 @@ module.exports = Debug =
 		@ui.clear()
 		@activeBugger = bugger
 		@show()
+		breakpointsCopy = ( {path:breakpoint.path, line:breakpoint.line} for breakpoint in @breakpoints )
 		bugger.debug options,
-			breakpoints: return {path:breakpoint.path, line:breakpoint.line} for breakpoint in @breakpoints
+			breakpoints: breakpointsCopy
 			ui: @ui
 		@provider.emit 'start'
 

@@ -107,7 +107,7 @@ class Sidebar
 			text.textContent = frame.name
 			item.appendChild text
 
-			text = document.createTextNode ' ' + frame.path
+			text = document.createTextNode ' ' + frame.path + (if frame.line then ':'+frame.line else '')
 			item.appendChild text
 
 	updateVariables: (variables) ->
@@ -115,7 +115,7 @@ class Sidebar
 			@variableList.removeChild @variableList.firstChild
 
 		for variable in variables
-			strignName = variable.name
+			stringName = variable.name
 			stringType = if variable.type then ' : ' + variable.type else ''
 			stringValue = if variable.value then ' = ' + variable.value else ''
 

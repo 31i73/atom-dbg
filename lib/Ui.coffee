@@ -41,7 +41,7 @@ class Ui
 				last_valid_frame = frame
 
 		if last_valid_frame!=null
-			@setLocation 'paused', last_valid_frame.path, last_valid_frame.line
+			@setLocation 'paused', last_valid_frame.file, last_valid_frame.line
 
 		@clearEditorMarkers()
 		for editor in atom.workspace.getTextEditors()
@@ -59,7 +59,7 @@ class Ui
 		frame = @stack[index]
 		if !frame.local
 			@bugger.sidebar.setShowSystemStack true
-		@setLocation 'paused', frame.path, frame.line
+		@setLocation 'paused', frame.file, frame.line
 
 	clearEditorMarkers: ->
 		for marker in @markers
@@ -69,7 +69,7 @@ class Ui
 	addEditorMarkers: (textEditor) ->
 		path = textEditor.getPath()
 		for frame in @stack
-			if frame.path == path
+			if frame.file == path
 				@markers.push lineMarker = textEditor.markBufferRange [[frame.line-1, 0], [frame.line-1, 0]]
 				textEditor.decorateMarker lineMarker, {
 					type: 'line-number'
