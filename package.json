@@ -1,9 +1,12 @@
 {
   "name": "dbg",
   "main": "./lib/main",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An interactive debugger frontend",
-  "keywords": ["debug", "debugger"],
+  "keywords": [
+    "debug",
+    "debugger"
+  ],
   "repository": "https://github.com/31i73/atom-dbg",
   "license": "MIT",
   "engines": {
