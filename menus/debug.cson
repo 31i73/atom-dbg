@@ -10,9 +10,9 @@ menu: [
       label: 'Debug'
       submenu: [
         { label: 'Continue / Pause', command: 'dbg:pause-continue' }
-        { label: 'Step Over', command: 'dbg:stepOver' }
-        { label: 'Step in', command: 'dbg:stepIn' }
-        { label: 'Step Out', command: 'dbg:stepOut' }
+        { label: 'Step Over', command: 'dbg:step-over' }
+        { label: 'Step in', command: 'dbg:step-in' }
+        { label: 'Step Out', command: 'dbg:step-out' }
         { label: 'Stop debugging', command: 'dbg:stop' }
         { type: 'separator' }
         { label: 'Toggle breakpoint on current line', command: 'dbg:toggle-breakpoint' }

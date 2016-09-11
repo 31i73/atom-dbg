@@ -17,9 +17,9 @@ Supports:
 `dbg:continue` - Continue  
 `dbg:pause` - Pause  
 `dbg:pause-continue` - Toggle pause/continue  
-`dbg:stepOver` - Step over the current line of code  
-`dbg:stepIn` - Step into the current procedure  
-`dbg:stepOut` - Complete and step out of the current procedure  
+`dbg:step-over` - Step over the current line of code  
+`dbg:step-in` - Step into the current procedure  
+`dbg:step-out` - Complete and step out of the current procedure  
 `dbg:stop` - Stop debugging  
 `dbg:toggle-breakpoint` - Toggle a breakpoint on the currently active line  
 `dbg:clear-breakpoints` - Clear all breakpoints  

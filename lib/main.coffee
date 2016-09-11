@@ -49,9 +49,9 @@ module.exports = Debug =
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:continue': => @continue()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause': => @pause()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause-continue': => if @ui.isPaused then @continue() else @pause()
-		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stepIn': => @stepIn()
-		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stepOver': => @stepOver()
-		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stepOut': => @stepOut()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-over': => @stepOver()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-in': => @stepIn()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-out': => @stepOut()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-breakpoint': =>
 			textEditor = atom.workspace.getActiveTextEditor()
 			if textEditor!=null
