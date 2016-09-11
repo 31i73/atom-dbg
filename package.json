@@ -3,7 +3,7 @@
   "main": "./lib/main",
   "version": "0.1.0",
   "description": "An interactive debugger frontend",
-  "keywords": [],
+  "keywords": ["debug", "debugger"],
   "repository": "https://github.com/31i73/atom-dbg",
   "license": "MIT",
   "engines": {
