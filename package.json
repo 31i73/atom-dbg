@@ -1,7 +1,7 @@
 {
   "name": "dbg",
   "main": "./lib/main",
-  "version": "0.2.2",
+  "version": "0.2.0",
   "description": "An interactive debugger frontend",
   "keywords": [
     "debug",
@@ -24,7 +24,7 @@
   "consumedServices": {
     "dbgProvider": {
       "versions": {
-        "^0.2.0": "consumeDbgProvider"
+        "^0.1.0": "consumeDbgProvider"
       }
     }
   }
