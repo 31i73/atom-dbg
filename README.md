@@ -10,7 +10,6 @@ Supports:
 * Continue/pause/stop/step-over/step-in/step-out
 * Call stack display
 * Local variable display
-* Program output (via https://atom.io/packages/output-panel)
 
 ## Commands:
 
@@ -40,11 +39,11 @@ Returns an object with the following events and functions:
 Example: `dbg.debug({ path: './myProg', args: ['testmode'] });`  
 > `options` - An object with the following properties:
 
->> `debugger` - Optional. The name of the dbg provider to use. (This can be omitted to auto-detect)  
->> `path` - Optional. The path to the file to debug  
->> `args` - Optional. An array of arguments to pass to the file being debugged  
->> `cwd` - Optional. The working directory to use when debugging  
->> `...` - Optional. Custom debugger arguments  
+>> `debugger` - *Optional*. The name of the dbg provider to use. (This can be omitted to auto-detect)  
+>> `path` - *Optional*. The path to the file to debug  
+>> `args` - *Optional*. An array of arguments to pass to the file being debugged  
+>> `cwd` - *Optional*. The working directory to use when debugging  
+>> `...` - *Optional*. Custom debugger arguments  
 
 > If a `debugger` is not specified, every dbg provider will be queried with the options object provided;  
 > The first provider to respond as being compatible will be selected  
@@ -107,16 +106,18 @@ To create a dbg provider provide a `dbgProvider` service with the following prop
 >>> Each `Frame` should have the following properties:  
 >>>> `name` - The friendly name of this location (`"main()"` etc)  
 >>>> `local:Bool` - Specifes if the location is locally accessible, or a system location (hidden by default unless at the top of the stack)  
->>>> `file` - Optional. The absolute file path
->>>> `path` - The displayed technical path  (`file.c:4`, `file.so:xbaadf00d` etc)
+>>>> `file` - *Optional*. The absolute file path
+>>>> `path` - The displayed technical path  (`file.c:4`, `file.so:xbaadf00d` etc)  
 >>>> `line` - The line number (1-based)  
 
 >>> `setVariables(variables:Variable[])` - The list of variables visible in the currently active frame
 
 >>>  Each `Variable` should have the following properties:
 >>>> `name` - The name of the variable  
->>>> `type` - Optional. The type of the variable (as a String)  
->>>> `value` - Optional. The value of the variable (as a String)  
+>>>> `type` - *Optional*. The type of the variable (as a String)  
+>>>> `value` - *Optional*. The value of the variable (as a String)  
+>>>> `expandable` - *Optional*. If `true` this variable may contain child properties. If expanded by the user `getVariableChildren()` will be called to retrieve them
+
 
 >>> `setFrame(frameIndex:Int)` - Set this index in the stack as the currently active frame, and navigate the Atom to this file and location if it exists  
 >>> If this frame in the stack is a system location then all system frames will be shown
@@ -127,6 +128,14 @@ To create a dbg provider provide a `dbgProvider` service with the following prop
 
 >>> `showWarning(warning:String)` - Display the specified warning  
 >>> `showError(error:String)` - Display the specified error  
+
+`getVariableChildren(name):Promise<Variable[]>` - *Optional*. If any variables are marked as `expandable` this function may be called to retrieve them  
+It will be passed the full dot-seperated path of the variable  
+It should return a promise that fulfills an array of child variables, also with the following properties:
+> `name` - The name of the variable  
+> `type` - *Optional*. The type of the variable (as a String)  
+> `value` - *Optional*. The value of the variable (as a String)  
+> `expandable` - *Optional*. If `true` this variable may contain child properties. If expanded by the user `getVariableChildren()` will again be called to retrieve them
 
 `stop()` - This function is called when debugging has ceased  
 Once this has been called the `api` property passed to `start()` should no longer be accessed  

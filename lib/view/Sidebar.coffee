@@ -60,8 +60,10 @@ class Sidebar
 		variableBlock.appendChild variableBody
 
 		@variableList = document.createElement 'ul'
-		@variableList.classList.add 'list-group'
+		@variableList.classList.add 'list-tree', 'has-collapsable-children'
 		variableBody.appendChild @variableList
+
+		@expandedVariables = {}
 
 	destroy: ->
 		@subscriptions.dispose()
@@ -114,15 +116,39 @@ class Sidebar
 		while @variableList.firstChild
 			@variableList.removeChild @variableList.firstChild
 
-		for variable in variables
+		addItem = (list, name, variable) =>
 			stringName = variable.name
 			stringType = if variable.type then ' : ' + variable.type else ''
 			stringValue = if variable.value then ' = ' + variable.value else ''
 
-			listItem = document.createElement 'li'
-			listItem.classList.add 'list-item'
-			listItem.setAttribute 'title', stringName + stringType + stringValue
-			@variableList.appendChild listItem
+			listItem = null
+
+			if variable.expandable
+				tree = document.createElement 'li'
+				tree.classList.add 'list-nested-item', 'collapsed'
+				list.appendChild tree
+
+				listItem = document.createElement 'div'
+				listItem.classList.add 'list-item'
+				listItem.setAttribute 'title', stringName + stringType + stringValue
+				listItem.addEventListener 'click', =>
+					tree.classList.toggle 'collapsed'
+					if branch.childNodes.length<1
+						@bugger.activeBugger?.getVariableChildren name
+							.then (children) =>
+								for child in children
+									addItem branch, name+'.'+child.name, child
+
+				tree.appendChild listItem
+
+				branch = document.createElement 'ul'
+				branch.classList.add 'list-tree'
+				tree.appendChild branch
+			else
+				listItem = document.createElement 'li'
+				listItem.classList.add 'list-item'
+				listItem.setAttribute 'title', stringName + stringType + stringValue
+				list.appendChild listItem
 
 			item = document.createElement 'span'
 			listItem.appendChild item
@@ -133,6 +159,9 @@ class Sidebar
 
 			text = document.createTextNode stringType + stringValue
 			item.appendChild text
+
+		for variable in variables
+			addItem @variableList, variable.name, variable
 
 	setFrame: (index) ->
 		index = @stackList.childNodes.length-1-index #reverse it
