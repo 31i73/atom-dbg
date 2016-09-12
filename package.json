@@ -17,14 +17,14 @@
     "dbg": {
       "description": "Provides debug support in Atom",
       "versions": {
-        "0.2.0": "provideDbg"
+        "0.1.0": "provideDbg"
       }
     }
   },
   "consumedServices": {
     "dbgProvider": {
       "versions": {
-        "^0.1.0": "consumeDbgProvider"
+        "^0.2.0": "consumeDbgProvider"
       }
     }
   }
