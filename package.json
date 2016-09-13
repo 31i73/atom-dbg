@@ -17,7 +17,7 @@
     "dbg": {
       "description": "Provides debug support in Atom",
       "versions": {
-        "1.0.0": "provideDbg"
+        "1.1.0": "provideDbg"
       }
     }
   },

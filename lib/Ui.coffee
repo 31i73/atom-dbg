@@ -17,7 +17,7 @@ class Ui
 	clear: ->
 		#TODO
 
-	setLocation: (_class, filename, lineNumber) ->
+	setLocation: (filename, lineNumber) ->
 		if !filename then return
 
 		file = new File filename
@@ -41,7 +41,7 @@ class Ui
 				last_valid_frame = frame
 
 		if last_valid_frame!=null
-			@setLocation 'paused', last_valid_frame.file, last_valid_frame.line
+			@setLocation last_valid_frame.file, last_valid_frame.line
 
 		@clearEditorMarkers()
 		for editor in atom.workspace.getTextEditors()
@@ -59,7 +59,7 @@ class Ui
 		frame = @stack[index]
 		if !frame.local
 			@bugger.sidebar.setShowSystemStack true
-		@setLocation 'paused', frame.file, frame.line
+		@setLocation frame.file, frame.line
 
 	clearEditorMarkers: ->
 		for marker in @markers
@@ -71,14 +71,13 @@ class Ui
 		for frame in @stack
 			if frame.file == path
 				@markers.push lineMarker = textEditor.markBufferRange [[frame.line-1, 0], [frame.line-1, 0]]
-				textEditor.decorateMarker lineMarker, {
+				_class = if frame.error then 'debug-position-error' else 'debug-position'
+				textEditor.decorateMarker lineMarker,
 					type: 'line-number'
-					class: 'debug-position'
-				}
-				textEditor.decorateMarker lineMarker, {
+					class: _class
+				textEditor.decorateMarker lineMarker,
 					type: 'line'
-					class: 'debug-position'
-				}
+					class: _class
 
 	running: ->
 		@isPaused = false

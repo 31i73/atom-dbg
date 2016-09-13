@@ -87,6 +87,10 @@ class Sidebar
 			frame = stack[i]
 			listItem = document.createElement 'li'
 			listItem.classList.add 'list-item'
+			
+			if frame.error
+				listItem.classList.add 'text-error'
+
 			if frame.local
 				listItem.classList.add 'local'
 			else

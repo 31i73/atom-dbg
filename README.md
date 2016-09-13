@@ -104,11 +104,12 @@ To create a dbg provider provide a `dbgProvider` service with the following prop
 >>> Frames are ordered from bottom to top, with index 0 being the entrypoint of the program and the highest index being the current executing location
 
 >>> Each `Frame` should have the following properties:  
->>>> `name` - The friendly name of this location (`"main()"` etc)  
+>>>> `name` - The friendly name of this location ("main()" etc)  
 >>>> `local:Bool` - Specifes if the location is locally accessible, or a system location (hidden by default unless at the top of the stack)  
 >>>> `file` - *Optional*. The absolute file path
 >>>> `path` - The displayed technical path  (`file.c:4`, `file.so:xbaadf00d` etc)  
 >>>> `line` - The line number (1-based)  
+>>>> `error` - *Optional*. If there is an error associated with this frame this should be a brief description (e.g. "Division by zero")  
 
 >>> `setVariables(variables:Variable[])` - The list of variables visible in the currently active frame
 
