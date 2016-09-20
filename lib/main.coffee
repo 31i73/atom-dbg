@@ -132,8 +132,10 @@ module.exports = Debug =
 		@atomSidebar?.hide()
 
 	continue: ->
+		unless @ui.isPaused then return
 		@activeBugger?.continue()
 	pause: ->
+		if @ui.isPaused then return
 		@activeBugger?.pause()
 
 	stepIn: ->
