@@ -1,6 +1,7 @@
 Ui = require './Ui'
 Toolbar = require './view/Toolbar'
 Sidebar = require './view/Sidebar'
+Custom = require './view/Custom'
 
 {CompositeDisposable, Emitter} = require 'atom'
 
@@ -11,6 +12,8 @@ module.exports = Debug =
 	atomToolbar: null
 	sidebar: null
 	atomSidebar: null
+	customDebugPanel: null
+	atomCustomDebugPanel: null
 	disposable: null
 	buggers: []
 	activeBugger: null
@@ -43,8 +46,12 @@ module.exports = Debug =
 
 		@sidebar = new Sidebar this
 		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
+		
+		@CustomDebugView = new Custom this
+		@CustomDebugView = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
 
 		@disposable = new CompositeDisposable
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:custom-debug': => @customDebug()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stop': => @stop()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:continue': => @continue()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause': => @pause()
@@ -130,6 +137,12 @@ module.exports = Debug =
 	hide: ->
 		@atomToolbar?.hide()
 		@atomSidebar?.hide()
+		
+	customDebug: ->
+		if @CustomDebugView.isVisible()
+      @CustomDebugView.hide()
+    else
+      @CustomDebugView.show()
 
 	continue: ->
 		unless @ui.isPaused then return
