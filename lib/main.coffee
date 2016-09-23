@@ -47,8 +47,8 @@ module.exports = Debug =
 		@sidebar = new Sidebar this
 		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
 		
-		@CustomDebugView = new Custom this
-		@CustomDebugView = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
+		@customDebugView = new Custom this
+		@atomCustomDebugView = atom.workspace.addBottomPanel item: @customDebugView.getElement(), visible: false, priority:200
 
 		@disposable = new CompositeDisposable
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:custom-debug': => @customDebug()
@@ -139,10 +139,10 @@ module.exports = Debug =
 		@atomSidebar?.hide()
 		
 	customDebug: ->
-		if @CustomDebugView.isVisible()
-      @CustomDebugView.hide()
+		if @atomCustomDebugView.isVisible()
+      @atomCustomDebugView.hide()
     else
-      @CustomDebugView.show()
+      @atomCustomDebugView.show()
 
 	continue: ->
 		unless @ui.isPaused then return
