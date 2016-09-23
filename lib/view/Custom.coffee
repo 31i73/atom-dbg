@@ -18,13 +18,14 @@ class CustomDebugView
     fileGroup.classList.add 'block'
     @element.appendChild fileGroup
     
-    pathLabel = document.createElement 'label'
-    pathLabel.textContent = "File to Debug"
-    pathLabel.classList.add 'inline-block'
-    fileGroup.appendChild pathLabel
+    # pathLabel = document.createElement 'label'
+    # pathLabel.textContent = "File to Debug"
+    # pathLabel.classList.add 'inline-block'
+    # fileGroup.appendChild pathLabel
     
-    @pathInput = document.createElement 'input'
-    @pathInput.classList.add 'inline-block', 'input-text'
+    @pathInput = document.createElement 'atom-text-editor'
+    @pathInput.setAttribute(name, value) for name, value of {"tabIndex": -1, "mini": true, "placeholder-text": "Path to the file to debug"}
+    # @pathInput.classList.add 'inline-block', 'input-text'
     @pathInput.type = "text"
     # @subscriptions.add atom.tooltips.add @pathInput, title: 'File to Debug'
     fileGroup.appendChild @pathInput
@@ -40,13 +41,14 @@ class CustomDebugView
     argsGroup.classList.add 'block'
     @element.appendChild argsGroup
     
-    argsLabel = document.createElement 'label'
-    argsLabel.textContent = "Arguments"
-    argsLabel.classList.add 'inline-block'
-    argsGroup.appendChild argsLabel
+    # argsLabel = document.createElement 'label'
+    # argsLabel.textContent = "Arguments"
+    # argsLabel.classList.add 'inline-block'
+    # argsGroup.appendChild argsLabel
     
-    @argsInput = document.createElement 'input'
-    @argsInput.classList.add 'inline-block', 'input-text'
+    @argsInput = document.createElement 'atom-text-editor'
+    @argsInput.setAttribute(name, value) for name, value of {"tabIndex": -1, "mini": true, "placeholder-text": "Arguments to pass to the file being debugged"}
+    # @argsInput.classList.add 'inline-block', 'input-text'
     # @subscriptions.add atom.tooltips.add @argsInput, title: 'Debugger arguements'
     argsGroup.appendChild @argsInput
     
@@ -55,18 +57,14 @@ class CustomDebugView
     cwdGroup.classList.add 'block'
     @element.appendChild cwdGroup
     
-    cwdLabel = document.createElement 'label'
-    cwdLabel.classList.add 'inline-block'
-    cwdLabel.textContent = "Working Directory"
-    cwdGroup.appendChild cwdLabel
-    
-    # @cwdInput = document.createElement 'input'
-    # @cwdInput.classList.add 'inline-block', 'input-text'
-    # # @subscriptions.add atom.tooltips.add @cwdInput, title: 'Working directory path'
-    # cwdGroup.appendChild @cwdInput
-    
+    # cwdLabel = document.createElement 'label'
+    # cwdLabel.classList.add 'inline-block'
+    # cwdLabel.textContent = "Working Directory"
+    # cwdGroup.appendChild cwdLabel
+        
     @cwdInput = document.createElement 'atom-text-editor'
-    @cwdInput.classList.add 'inline-block', 'editor', 'mini'
+    @cwdInput.setAttribute(name, value) for name, value of {"tabIndex": -1, "mini": true, "placeholder-text": "Working directory to use when debugging"}
+    # @cwdInput.classList.add 'inline-block', 'editor', 'mini'
     # @subscriptions.add atom.tooltips.add @cwdInput, title: 'Working directory path'
     cwdGroup.appendChild @cwdInput
     
