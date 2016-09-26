@@ -1,3 +1,4 @@
+path = require('path');
 {CompositeDisposable} = require 'atom'
 
 module.exports =
@@ -53,8 +54,9 @@ class CustomDebugView
     bgroup = document.createElement 'div'
     bgroup.classList.add 'btn-group'
     @pathButton = document.createElement 'button'
-    @pathButton.classList.add 'btn', 'icon', 'icon-file-directory'
-    # @pathButton.addEventListener 'click', -> bugger.continue()
+    @pathButton.classList.add 'btn', 'icon', 'icon-file-binary'
+    @pathButton.textContent = "Choose File"
+    @pathButton.addEventListener 'click', => @pickFile()
     # @subscriptions.add atom.tooltips.add @pathButton, title: 'Choose File to Debug'
     section.appendChild div
     div.appendChild bgroup
@@ -92,6 +94,7 @@ class CustomDebugView
     bgroup.classList.add 'btn-group'
     @cwdButton = document.createElement 'button'
     @cwdButton.classList.add 'btn', 'icon', 'icon-file-directory'
+    @cwdButton.textContent = "Choose Directory"
     # @cwdButton.addEventListener 'click', -> bugger.continue()
     # @subscriptions.add atom.tooltips.add @cwdButton, title: 'Choose File to Debug'
     section.appendChild div
@@ -110,6 +113,16 @@ class CustomDebugView
     # @subscriptions.add atom.tooltips.add @startButton, title: 'Choose working directory'
     startGroup.appendChild @startButton
 
+  pickFile: ->
+    picker = document.createElement 'input'
+    picker.setAttribute 'type', 'file'
+    picker.onchange = () => 
+      if picker.files.length > 0
+        @pathInput.getModel().setBuffer(picker.files[0].path)
+        if @cwdInput.getModel().getBuffer() == ""
+          @cwdInput.getModel().setText(path.dirname(picker.files[0].path))
+    picker.click()
+    
   setPanel: (@panel) ->
   
   # Returns an object that can be retrieved when package is activated
