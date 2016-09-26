@@ -98,3 +98,53 @@ atom-text-editor::shadow {
 		width: 250px;
 	}
 }
+
+.debug-custom {
+	@min-width: 200px;
+	@item-width: 260px;
+	.header {
+    padding: @component-padding/4 @component-padding/2;
+    min-width: @min-width;
+  }
+  .header-item {
+    margin: @component-padding/4 0;
+  }
+	.btn-group {
+    display: flex;
+    flex: 1;
+    .btn {
+      flex: 1;
+			line-height: 1;
+    }
+    & + .btn-group {
+      margin-left: @component-padding;
+    }
+  }
+	.btn > .icon {
+    width: 20px;
+    height: 16px;
+    vertical-align: middle;
+    fill: currentColor;
+    stroke: currentColor;
+  }
+	.input-block {
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		min-width: @min-width;
+	}
+	.input-block-item {
+    display: flex;
+		flex: 1;
+		padding: @component-padding / 2;
+  }
+  .input-block-item--flex {
+    flex: 100 1 @item-width;
+  }
+	.editor-container {
+    position: relative;
+    atom-text-editor {
+      width: 100%;
+    }
+	}
+}

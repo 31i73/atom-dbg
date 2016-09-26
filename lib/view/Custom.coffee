@@ -1,11 +1,33 @@
+{CompositeDisposable} = require 'atom'
+
 module.exports =
 class CustomDebugView
+  panel = null
+  
   constructor: (serializedState) ->
-    # @subscriptions = new CompositeDisposable()
+    @subscriptions = new CompositeDisposable()
     
+    @content()
+    @handleEvents()
+    
+  handleEvents: ->
+    @subscriptions.add atom.commands.add @element,
+      'core:close': => @panel?hide()
+      'core:cancel': => @panel?hide()
+    
+  content: ->
     # Create root element
     @element = document.createElement('div')
+    @element.setAttribute("tabIndex", -1)
     @element.classList.add('debug-custom')
+    
+    header = document.createElement('header')
+    header.classList.add 'header'
+    span = document.createElement('span')
+    span.classList.add 'header-item', 'description'
+    span.textContent = "Configure Debug Session"
+    @element.appendChild header
+    header.appendChild span
     
     # debugger - Optional. The name of the dbg provider to use. (This can be omitted to auto-detect)
     # path - Optional. The path to the file to debug
@@ -14,65 +36,67 @@ class CustomDebugView
     # ... - Optional. Custom debugger arguments
   
     # file to Debug
+    section = document.createElement 'section'
+    section.classList.add 'input-block'
     fileGroup = document.createElement 'div'
-    fileGroup.classList.add 'block'
-    @element.appendChild fileGroup
-    
-    # pathLabel = document.createElement 'label'
-    # pathLabel.textContent = "File to Debug"
-    # pathLabel.classList.add 'inline-block'
-    # fileGroup.appendChild pathLabel
-    
+    fileGroup.classList.add 'input-block-item', 'input-block-item--flex', 'editor-container'
+    @element.appendChild section
+    section.appendChild fileGroup
+
     @pathInput = document.createElement 'atom-text-editor'
-    @pathInput.setAttribute(name, value) for name, value of {"tabIndex": -1, "mini": true, "placeholder-text": "Path to the file to debug"}
-    # @pathInput.classList.add 'inline-block', 'input-text'
+    @pathInput.setAttribute(name, value) for name, value of {"mini": true, "placeholder-text": "Path to the file to debug"}
     @pathInput.type = "text"
-    # @subscriptions.add atom.tooltips.add @pathInput, title: 'File to Debug'
     fileGroup.appendChild @pathInput
-    
+
+    div = document.createElement 'div'
+    div.classList.add 'input-block-item'
+    bgroup = document.createElement 'div'
+    bgroup.classList.add 'btn-group'
     @pathButton = document.createElement 'button'
-    @pathButton.classList.add 'inline-block', 'btn', 'icon', 'icon-file-directory'
+    @pathButton.classList.add 'btn', 'icon', 'icon-file-directory'
     # @pathButton.addEventListener 'click', -> bugger.continue()
     # @subscriptions.add atom.tooltips.add @pathButton, title: 'Choose File to Debug'
-    fileGroup.appendChild @pathButton
+    section.appendChild div
+    div.appendChild bgroup
+    bgroup.appendChild @pathButton
 
-    # args
+    # file args
+    section = document.createElement 'section'
+    section.classList.add 'input-block'
     argsGroup = document.createElement 'div'
-    argsGroup.classList.add 'block'
-    @element.appendChild argsGroup
-    
-    # argsLabel = document.createElement 'label'
-    # argsLabel.textContent = "Arguments"
-    # argsLabel.classList.add 'inline-block'
-    # argsGroup.appendChild argsLabel
-    
+    argsGroup.classList.add 'input-block-item', 'input-block-item--flex', 'editor-container'
+    @element.appendChild section
+    section.appendChild argsGroup
+
     @argsInput = document.createElement 'atom-text-editor'
-    @argsInput.setAttribute(name, value) for name, value of {"tabIndex": -1, "mini": true, "placeholder-text": "Arguments to pass to the file being debugged"}
-    # @argsInput.classList.add 'inline-block', 'input-text'
-    # @subscriptions.add atom.tooltips.add @argsInput, title: 'Debugger arguements'
+    @argsInput.setAttribute(name, value) for name, value of {"mini": true, "placeholder-text": "Arguments to pass to the file being debugged"}
+    @argsInput.type = "text"
     argsGroup.appendChild @argsInput
-    
+
     # working directory for debugger
+    section = document.createElement 'section'
+    section.classList.add 'input-block'
     cwdGroup = document.createElement 'div'
-    cwdGroup.classList.add 'block'
-    @element.appendChild cwdGroup
-    
-    # cwdLabel = document.createElement 'label'
-    # cwdLabel.classList.add 'inline-block'
-    # cwdLabel.textContent = "Working Directory"
-    # cwdGroup.appendChild cwdLabel
-        
+    cwdGroup.classList.add 'input-block-item', 'input-block-item--flex', 'editor-container'
+    @element.appendChild section
+    section.appendChild cwdGroup
+
     @cwdInput = document.createElement 'atom-text-editor'
-    @cwdInput.setAttribute(name, value) for name, value of {"tabIndex": -1, "mini": true, "placeholder-text": "Working directory to use when debugging"}
-    # @cwdInput.classList.add 'inline-block', 'editor', 'mini'
-    # @subscriptions.add atom.tooltips.add @cwdInput, title: 'Working directory path'
+    @cwdInput.setAttribute(name, value) for name, value of {"mini": true, "placeholder-text": "Working directory to use when debugging"}
+    @cwdInput.type = "text"
     cwdGroup.appendChild @cwdInput
-    
+
+    div = document.createElement 'div'
+    div.classList.add 'input-block-item'
+    bgroup = document.createElement 'div'
+    bgroup.classList.add 'btn-group'
     @cwdButton = document.createElement 'button'
-    @cwdButton.classList.add 'inline-block', 'btn', 'icon', 'icon-file-directory'
+    @cwdButton.classList.add 'btn', 'icon', 'icon-file-directory'
     # @cwdButton.addEventListener 'click', -> bugger.continue()
-    # @subscriptions.add atom.tooltips.add @cwdButton, title: 'Choose working directory'
-    cwdGroup.appendChild @cwdButton
+    # @subscriptions.add atom.tooltips.add @cwdButton, title: 'Choose File to Debug'
+    section.appendChild div
+    div.appendChild bgroup
+    bgroup.appendChild @cwdButton
     
     # Start Button
     startGroup = document.createElement 'div'
@@ -86,12 +110,14 @@ class CustomDebugView
     # @subscriptions.add atom.tooltips.add @startButton, title: 'Choose working directory'
     startGroup.appendChild @startButton
 
+  setPanel: (@panel) ->
+  
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
   # Tear down any state and detach
   destroy: ->
-    # @subscriptions.dispose()
+    @subscriptions.dispose()
     @element.remove()
 
   getElement: ->
