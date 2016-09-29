@@ -12,9 +12,9 @@ class CustomDebugView
     @handleEvents()
     
   handleEvents: ->
-    @subscriptions.add atom.commands.add @element,
-      'core:close': => @panel?hide()
-      'core:cancel': => @panel?hide()
+    # @subscriptions.add atom.commands.add @element,
+    #   'core:close': => @panel?hide()
+    #   'core:cancel': => @panel?hide()
     
   content: ->
     # Create root element
@@ -30,11 +30,37 @@ class CustomDebugView
     @element.appendChild header
     header.appendChild span
     
+    @closeBtn = document.createElement('span')
+    @closeBtn.classList.add 'header-item','pull-right','btn', 'icon', 'icon-remove-close'
+    span.appendChild @closeBtn
+      # @span 'Finding with Options: '
+      # @span outlet: 'optionsLabel', class: 'options'
+    # @subscriptions.add atom.tooltips.add @closeBtn, title: 'Choose File to Debug'
+    @closeBtn.addEventListener 'click', => @panel?.hide()
+    
     # debugger - Optional. The name of the dbg provider to use. (This can be omitted to auto-detect)
     # path - Optional. The path to the file to debug
     # args - Optional. An array of arguments to pass to the file being debugged
     # cwd - Optional. The working directory to use when debugging
     # ... - Optional. Custom debugger arguments
+    
+    div = document.createElement('div')
+    span = document.createElement('span')
+    label = document.createElement('label')
+    # label.classList.add 'header-item'
+    label.textContent = "Select Debugger"
+    span.appendChild label
+    div.appendChild span
+    
+    @selectDebugger = document.createElement('select')
+    @selectDebugger.classList.add 'input-select'
+    option = document.createElement('option')
+    option.textContent = "auto"
+    # TODO: find the installed debuggers and populate this element
+    @element.appendChild div
+    div.appendChild span
+    span.appendChild @selectDebugger
+    @selectDebugger.appendChild option
   
     # file to Debug
     section = document.createElement 'section'
@@ -124,7 +150,7 @@ class CustomDebugView
     picker.click()
     
   setPanel: (@panel) ->
-  
+
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 

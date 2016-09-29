@@ -12,8 +12,8 @@ module.exports = Debug =
 	atomToolbar: null
 	sidebar: null
 	atomSidebar: null
+	customDebugView: null
 	customDebugPanel: null
-	atomCustomDebugPanel: null
 	disposable: null
 	buggers: []
 	activeBugger: null
