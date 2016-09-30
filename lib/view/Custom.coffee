@@ -47,6 +47,7 @@ class CustomDebugView
     # ... - Optional. Custom debugger arguments
     
     div = document.createElement('div')
+    div.classList.add 'input-block-item', 'input-block-item--flex'
     span = document.createElement('span')
     label = document.createElement('label')
     # label.classList.add 'header-item'
@@ -131,14 +132,13 @@ class CustomDebugView
     
     # Start Button
     startGroup = document.createElement 'div'
-    startGroup.classList.add 'block'
+    startGroup.classList.add 'block','input-block-item','pull-right','input-block-item--flex'
     @element.appendChild startGroup
     
     @startButton = document.createElement 'button'
     @startButton.classList.add 'btn-lg', 'btn-success', 'icon', 'icon-chevron-right'
     @startButton.textContent = "Start"
-    # @startButton.addEventListener 'click', -> bugger.continue()
-    # @subscriptions.add atom.tooltips.add @startButton, title: 'Choose working directory'
+    @startButton.addEventListener 'click', => @startDebugging()
     startGroup.appendChild @startButton
 
   pickFile: ->
@@ -155,6 +155,22 @@ class CustomDebugView
     option = document.createElement('option')
     option.textContent = name
     @selectDebugger.appendChild option
+    
+  startDebugging: ->
+    options = {debugger : null, path: null, args : null, cwd : null}
+    if @pathInput.model.buffer.lines[0] != ""
+      options.path = @pathInput.model.buffer.lines[0]
+    else
+      return
+    if @selectDebugger.value != "auto"
+      options.debugger = @selectDebugger.value
+    if @argsInput.model.buffer.lines[0] != ""
+      options.args = @argsInput.model.buffer.lines[0]
+    if @cwdInput.model.buffer.lines[0] != ""
+      options.cwd = @cwdInput.model.buffer.lines[0]
+    console.log(options)    
+    @panel.hide()
+    @bugger.debug(options)
               
   setPanel: (@panel) ->
 
