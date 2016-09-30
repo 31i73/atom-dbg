@@ -165,7 +165,7 @@ class CustomDebugView
     if @selectDebugger.value != "auto"
       options.debugger = @selectDebugger.value
     if @argsInput.model.buffer.lines[0] != ""
-      options.args = @argsInput.model.buffer.lines[0]
+      options.args = @parseArgsInput(@argsInput.model.buffer.lines[0])
     if @cwdInput.model.buffer.lines[0] != ""
       options.cwd = @cwdInput.model.buffer.lines[0]
     console.log(options)    
@@ -186,3 +186,14 @@ class CustomDebugView
 
   getElement: ->
     @element
+
+  parseArgsInput: (text) ->
+    reg = /(?:")(.*?)(?:")|(?:')(.*?)(?:')|(\S+)/g
+    args = []
+    result = reg.exec(text)
+    while result?
+      args.push(result[1]) if result[1]?
+      args.push(result[2]) if result[2]?
+      args.push(result[3]) if result[3]?
+      result = reg.exec(text)
+    return args
