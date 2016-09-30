@@ -254,6 +254,7 @@ module.exports = Debug =
 
 	consumeDbgProvider: (debug) ->
 		@buggers.push debug
+		@customDebugView.addDebuggerOption(debug.name)
 
 	provideDbg: ->
 		return @provider

@@ -4,9 +4,11 @@ path = require('path');
 module.exports =
 class CustomDebugView
   panel = null
+  bugger = null
   
-  constructor: (serializedState) ->
+  constructor: (bugger) ->
     @subscriptions = new CompositeDisposable()
+    @bugger = bugger
     
     @content()
     @handleEvents()
@@ -54,12 +56,12 @@ class CustomDebugView
     
     @selectDebugger = document.createElement('select')
     @selectDebugger.classList.add 'input-select'
-    option = document.createElement('option')
-    option.textContent = "auto"
-    # TODO: find the installed debuggers and populate this element
     @element.appendChild div
     div.appendChild span
     span.appendChild @selectDebugger
+    
+    option = document.createElement('option')
+    option.textContent = "auto"
     @selectDebugger.appendChild option
   
     # file to Debug
@@ -149,8 +151,15 @@ class CustomDebugView
           @cwdInput.getModel().setText(path.dirname(picker.files[0].path))
     picker.click()
     
+  addDebuggerOption: (name) ->
+    option = document.createElement('option')
+    option.textContent = name
+    @selectDebugger.appendChild option
+              
   setPanel: (@panel) ->
 
+  setBuggers: (@buggers) ->
+    
   # Returns an object that can be retrieved when package is activated
   serialize: ->
 
