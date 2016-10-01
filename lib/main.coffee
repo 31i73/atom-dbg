@@ -49,7 +49,8 @@ module.exports = Debug =
 		
 		@customDebugView = new Custom this
 		@customDebugPanel = atom.workspace.addBottomPanel item: @customDebugView.getElement(), visible: false, priority:200
-		@customDebugView.setPanel(@customDebugPanel)
+		@customDebugView.emitter.on 'close', =>
+			@customDebugPanel.hide()
 
 		@disposable = new CompositeDisposable
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:custom-debug': => @customDebug()
@@ -67,12 +68,7 @@ module.exports = Debug =
 				@toggleBreakpoint textEditor.getPath(), pos.row+1
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:clear-breakpoints': =>
 			@clearBreakpoints()
-		
-		# @disposable.add atom.commands.add @customDebugPanel, 'dbg:stop': => @stop()
-		# 
-		# @subscriptions.add atom.commands.add @element,
-    #   'core:close': => @panel?hide()
-    #   'core:cancel': => @panel?hide()
+		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @customDebugPanel.hide()
 
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
 			path = textEditor.getPath()
