@@ -144,9 +144,6 @@ module.exports = Debug =
 	customDebug: ->
 		@customDebugPanel.show()
 
-	customDebugHide: ->
-		@customDebugPanel?.hide()
-
 	continue: ->
 		unless @ui.isPaused then return
 		@activeBugger?.continue()
