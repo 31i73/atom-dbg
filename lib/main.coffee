@@ -46,7 +46,7 @@ module.exports = Debug =
 
 		@sidebar = new Sidebar this
 		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
-		
+
 		@customDebugView = new Custom this
 		@customDebugPanel = atom.workspace.addBottomPanel item: @customDebugView.getElement(), visible: false, priority:200
 		@customDebugView.emitter.on 'close', =>
@@ -140,10 +140,10 @@ module.exports = Debug =
 	hide: ->
 		@atomToolbar?.hide()
 		@atomSidebar?.hide()
-		
+
 	customDebug: ->
 		@customDebugPanel.show()
-			
+
 	customDebugHide: ->
 		@customDebugPanel?.hide()
 
