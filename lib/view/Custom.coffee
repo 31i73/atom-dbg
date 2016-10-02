@@ -1,5 +1,5 @@
 path = require('path');
-{Emitter, promptForPath} = require 'atom'
+{Emitter} = require 'atom'
 
 module.exports =
 class CustomDebugView
@@ -16,7 +16,7 @@ class CustomDebugView
     @element.setAttribute("tabIndex", -1)
     @element.classList.add('debug-custom')
 
-    header = document.createElement 'div' 
+    header = document.createElement 'div'
     header.classList.add 'panel-heading'
     header.textContent = "Configure Debug Session"
     @element.appendChild header
@@ -29,29 +29,32 @@ class CustomDebugView
       @emitter.emit 'close'
 
     div = document.createElement('div')
-    div.classList.add 'input-block-item', 'input-block-item--flex'
-    span = document.createElement('span')
+    div.classList.add 'input-block-item', 'labeled-block'
     label = document.createElement('label')
     label.textContent = "Select Debugger"
-    span.appendChild label
-    div.appendChild span
+    div.appendChild label
 
     @selectDebugger = document.createElement('select')
-    @selectDebugger.classList.add 'input-select'
+    @selectDebugger.classList.add 'input-select', 'input-select-item'
     @element.appendChild div
-    div.appendChild span
-    span.appendChild @selectDebugger
+    div.appendChild @selectDebugger
 
     option = document.createElement('option')
     option.textContent = "auto"
     @selectDebugger.appendChild option
+
+    body = document.createElement('div')
+    body.classList.add('body')
+    inputBody = document.createElement('div')
+    inputBody.classList.add 'input-inline-block'
+    body.appendChild inputBody
 
     # file to Debug
     section = document.createElement 'section'
     section.classList.add 'input-block'
     fileGroup = document.createElement 'div'
     fileGroup.classList.add 'input-block-item', 'input-block-item--flex', 'editor-container'
-    @element.appendChild section
+    inputBody.appendChild section
     section.appendChild fileGroup
 
     @pathInput = document.createElement 'atom-text-editor'
@@ -64,7 +67,7 @@ class CustomDebugView
     bgroup = document.createElement 'div'
     bgroup.classList.add 'btn-group'
     pathButton = document.createElement 'button'
-    pathButton.classList.add 'btn', 'icon', 'icon-file-binary'
+    pathButton.classList.add 'btn-item', 'btn', 'icon', 'icon-file-binary'
     pathButton.textContent = "Choose File"
     pathButton.addEventListener 'click', => @pickFile()
     section.appendChild div
@@ -76,7 +79,7 @@ class CustomDebugView
     section.classList.add 'input-block'
     argsGroup = document.createElement 'div'
     argsGroup.classList.add 'input-block-item', 'input-block-item--flex', 'editor-container'
-    @element.appendChild section
+    inputBody.appendChild section
     section.appendChild argsGroup
 
     @argsInput = document.createElement 'atom-text-editor'
@@ -89,7 +92,7 @@ class CustomDebugView
     section.classList.add 'input-block'
     cwdGroup = document.createElement 'div'
     cwdGroup.classList.add 'input-block-item', 'input-block-item--flex', 'editor-container'
-    @element.appendChild section
+    inputBody.appendChild section
     section.appendChild cwdGroup
 
     @cwdInput = document.createElement 'atom-text-editor'
@@ -102,7 +105,7 @@ class CustomDebugView
     bgroup = document.createElement 'div'
     bgroup.classList.add 'btn-group'
     cwdButton = document.createElement 'button'
-    cwdButton.classList.add 'btn', 'icon', 'icon-file-directory'
+    cwdButton.classList.add 'btn-item', 'btn', 'icon', 'icon-file-directory'
     cwdButton.textContent = "Choose Directory"
     cwdButton.addEventListener 'click', => @pickCwd()
     section.appendChild div
@@ -110,21 +113,22 @@ class CustomDebugView
     bgroup.appendChild cwdButton
 
     # Start Button
-    startGroup = document.createElement 'div'
-    startGroup.classList.add 'block','input-block-item','pull-right','input-block-item--flex'
-    @element.appendChild startGroup
+    div = document.createElement 'div'
+    div.classList.add 'inline-block-start'
+    body.appendChild div
+    @element.appendChild body
 
     startButton = document.createElement 'button'
     startButton.classList.add 'btn-lg', 'btn-success', 'icon', 'icon-chevron-right'
     startButton.textContent = "Start"
     startButton.addEventListener 'click', => @startDebugging()
-    startGroup.appendChild startButton
+    div.appendChild startButton
 
   pickFile: ->
     openOptions =
       properties: ['openFile', 'createDirectory']
       title: 'Select File'
-    
+
     # Show the open dialog as child window on Windows and Linux, and as
     # independent dialog on macOS. This matches most native apps.
     parentWindow =
@@ -143,7 +147,7 @@ class CustomDebugView
     openOptions =
       properties: ['openDirectory', 'createDirectory']
       title: 'Select Folder'
-    
+
     # Show the open dialog as child window on Windows and Linux, and as
     # independent dialog on macOS. This matches most native apps.
     parentWindow =

@@ -102,6 +102,7 @@ atom-text-editor::shadow {
 .debug-custom {
 	@min-width: 200px;
 	@item-width: 260px;
+	@button-width: 150px;
 	.panel-heading {
 		position: relative;
 		cursor: default;
@@ -138,21 +139,11 @@ atom-text-editor::shadow {
   }
 	.btn-group {
     display: flex;
-    flex: 1;
-    .btn {
-      flex: 1;
-			line-height: 1;
-    }
-    & + .btn-group {
-      margin-left: @component-padding;
-    }
+		flex: 1 1 @button-width;
+		min-width: @button-width;
   }
-	.btn > .icon {
-    width: 20px;
-    height: 16px;
-    vertical-align: middle;
-    fill: currentColor;
-    stroke: currentColor;
+	.btn-item {
+		flex: auto;
   }
 	.input-block {
 		display: flex;
@@ -160,6 +151,25 @@ atom-text-editor::shadow {
 		width: 100%;
 		min-width: @min-width;
 	}
+	.body {
+		display: flex;
+	}
+	.labeled-block {
+		align-items: center;
+	}
+	.input-select-item {
+		padding-left: @component-padding / 2;
+		margin-left: @component-padding;
+	}
+	.input-inline-block {
+    display: inline-block;
+		flex: auto;
+  }
+	.inline-block-start {
+    display: flex;
+		flex: none;
+		padding: @component-padding / 2;
+  }
 	.input-block-item {
     display: flex;
 		flex: 1;
