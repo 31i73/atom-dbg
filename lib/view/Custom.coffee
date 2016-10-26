@@ -118,8 +118,8 @@ class CustomDebugView
 		@element.appendChild body
 
 		startButton = document.createElement 'button'
-		startButton.classList.add 'btn-lg', 'btn-success', 'icon', 'icon-chevron-right'
-		startButton.textContent = "Start"
+		startButton.classList.add 'btn', 'btn-lg', 'btn-primary', 'icon', 'icon-chevron-right'
+		startButton.textContent = "Debug"
 		startButton.addEventListener 'click', => @startDebugging()
 		div.appendChild startButton
 
