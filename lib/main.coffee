@@ -1,6 +1,7 @@
 Ui = require './Ui'
 Toolbar = require './view/Toolbar'
 Sidebar = require './view/Sidebar'
+Custom = require './view/Custom'
 
 {CompositeDisposable, Emitter} = require 'atom'
 
@@ -11,6 +12,8 @@ module.exports = Debug =
 	atomToolbar: null
 	sidebar: null
 	atomSidebar: null
+	customDebugView: null
+	customDebugPanel: null
 	disposable: null
 	buggers: []
 	activeBugger: null
@@ -44,7 +47,13 @@ module.exports = Debug =
 		@sidebar = new Sidebar this
 		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
 
+		@customDebugView = new Custom this
+		@customDebugPanel = atom.workspace.addBottomPanel item: @customDebugView.getElement(), visible: false, priority:200
+		@customDebugView.emitter.on 'close', =>
+			@customDebugPanel.hide()
+
 		@disposable = new CompositeDisposable
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:custom-debug': => @customDebug()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stop': => @stop()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:continue': => @continue()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause': => @pause()
@@ -59,6 +68,7 @@ module.exports = Debug =
 				@toggleBreakpoint textEditor.getPath(), pos.row+1
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:clear-breakpoints': =>
 			@clearBreakpoints()
+		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @customDebugPanel.hide()
 
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
 			path = textEditor.getPath()
@@ -130,6 +140,9 @@ module.exports = Debug =
 	hide: ->
 		@atomToolbar?.hide()
 		@atomSidebar?.hide()
+
+	customDebug: ->
+		@customDebugPanel.show()
 
 	continue: ->
 		unless @ui.isPaused then return
@@ -234,6 +247,7 @@ module.exports = Debug =
 
 	consumeDbgProvider: (debug) ->
 		@buggers.push debug
+		@customDebugView.addDebuggerOption(debug.name)
 
 	provideDbg: ->
 		return @provider

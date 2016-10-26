@@ -98,3 +98,90 @@ atom-text-editor::shadow {
 		width: 250px;
 	}
 }
+
+.debug-custom {
+	@min-width: 200px;
+	@item-width: 260px;
+	@button-width: 150px;
+	.panel-heading {
+		position: relative;
+		cursor: default;
+
+		.action-close {
+			border: 0 none;
+			background: transparent;
+			position: absolute;
+			top: 0;
+			right: 0;
+			height: 100%;
+			cursor: pointer;
+
+			&::before {
+				width: 28px;
+				margin-right: 0;
+				text-align: center;
+				vertical-align: middle;
+			}
+			&::after {
+				content: '';
+				display: inline-block;
+				height: 100%;
+				vertical-align: middle;
+			}
+		}
+	}
+	.header {
+    padding: @component-padding/4 @component-padding/2;
+    min-width: @min-width;
+  }
+  .header-item {
+    margin: @component-padding/4 0;
+  }
+	.btn-group {
+    display: flex;
+		flex: 1 1 @button-width;
+		min-width: @button-width;
+  }
+	.btn-item {
+		flex: auto;
+  }
+	.input-block {
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		min-width: @min-width;
+	}
+	.body {
+		display: flex;
+	}
+	.labeled-block {
+		align-items: center;
+	}
+	.input-select-item {
+		padding-left: @component-padding / 2;
+		margin-left: @component-padding;
+	}
+	.input-inline-block {
+    display: inline-block;
+		flex: auto;
+  }
+	.inline-block-start {
+    display: flex;
+		flex: none;
+		padding: @component-padding / 2;
+  }
+	.input-block-item {
+    display: flex;
+		flex: 1;
+		padding: @component-padding / 2;
+  }
+  .input-block-item--flex {
+    flex: 100 1 @item-width;
+  }
+	.editor-container {
+    position: relative;
+    atom-text-editor {
+      width: 100%;
+    }
+	}
+}
