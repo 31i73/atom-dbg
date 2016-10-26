@@ -30,7 +30,7 @@ class CustomDebugView
 		div = document.createElement 'div'
 		div.classList.add 'input-block-item', 'labeled-block'
 		label = document.createElement 'label'
-		label.textContent = "Select Debugger"
+		label.textContent = 'Select debugger'
 		div.appendChild label
 
 		@selectDebugger = document.createElement 'select'
@@ -39,7 +39,7 @@ class CustomDebugView
 		div.appendChild @selectDebugger
 
 		option = document.createElement 'option'
-		option.textContent = "auto"
+		option.textContent = 'automatic'
 		@selectDebugger.appendChild option
 
 		body = document.createElement 'div'
@@ -172,7 +172,7 @@ class CustomDebugView
 			options.path = @pathInput.model.buffer.lines[0]
 		else
 			return
-		if @selectDebugger.value != "auto"
+		if @selectDebugger.value != 'automatic'
 			options.debugger = @selectDebugger.value
 		if @argsInput.model.buffer.lines[0] != ""
 			options.args = [ @argsInput.model.buffer.lines[0] ] # TODO: parse into args?
