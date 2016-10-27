@@ -1,7 +1,7 @@
 Ui = require './Ui'
 Toolbar = require './view/Toolbar'
 Sidebar = require './view/Sidebar'
-Custom = require './view/Custom'
+CustomPanel = require './view/CustomPanel'
 
 {CompositeDisposable, Emitter} = require 'atom'
 
@@ -12,8 +12,8 @@ module.exports = Debug =
 	atomToolbar: null
 	sidebar: null
 	atomSidebar: null
-	customDebugView: null
-	customDebugPanel: null
+	customPanel: null
+	atomCustomPanel: null
 	disposable: null
 	buggers: []
 	activeBugger: null
@@ -47,10 +47,10 @@ module.exports = Debug =
 		@sidebar = new Sidebar this
 		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
 
-		@customDebugView = new Custom this
-		@customDebugPanel = atom.workspace.addBottomPanel item: @customDebugView.getElement(), visible: false, priority:200
-		@customDebugView.emitter.on 'close', =>
-			@customDebugPanel.hide()
+		@customPanel = new CustomPanel this
+		@atomCustomPanel = atom.workspace.addBottomPanel item: @customPanel.getElement(), visible: false, priority:200
+		@customPanel.emitter.on 'close', =>
+			@atomCustomPanel.hide()
 
 		@disposable = new CompositeDisposable
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:custom-debug': => @customDebug()
@@ -68,7 +68,7 @@ module.exports = Debug =
 				@toggleBreakpoint textEditor.getPath(), pos.row+1
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:clear-breakpoints': =>
 			@clearBreakpoints()
-		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @customDebugPanel.hide()
+		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @atomCustomPanel.hide()
 
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
 			path = textEditor.getPath()
@@ -142,7 +142,7 @@ module.exports = Debug =
 		@atomSidebar?.hide()
 
 	customDebug: ->
-		@customDebugPanel.show()
+		@atomCustomPanel.show()
 
 	continue: ->
 		unless @ui.isPaused then return
@@ -247,7 +247,7 @@ module.exports = Debug =
 
 	consumeDbgProvider: (debug) ->
 		@buggers.push debug
-		@customDebugView.addDebuggerOption(debug.name)
+		@customPanel.updateDebuggers()
 
 	provideDbg: ->
 		return @provider

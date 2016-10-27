@@ -1,8 +1,8 @@
-path = require('path');
+path = require 'path'
 {Emitter} = require 'atom'
 
 module.exports =
-class CustomDebugView
+class CustomPanel
 	bugger = null
 
 	constructor: (bugger) ->
@@ -33,14 +33,10 @@ class CustomDebugView
 		label.textContent = 'Select debugger'
 		div.appendChild label
 
-		@selectDebugger = document.createElement 'select'
-		@selectDebugger.classList.add 'input-select', 'input-select-item'
+		@debuggerList = document.createElement 'select'
+		@debuggerList.classList.add 'input-select', 'input-select-item'
 		@element.appendChild div
-		div.appendChild @selectDebugger
-
-		option = document.createElement 'option'
-		option.textContent = 'automatic'
-		@selectDebugger.appendChild option
+		div.appendChild @debuggerList
 
 		body = document.createElement 'div'
 		body.classList.add 'body'
@@ -123,6 +119,8 @@ class CustomDebugView
 		startButton.addEventListener 'click', => @startDebugging()
 		div.appendChild startButton
 
+		@updateDebuggers()
+
 	pickFile: ->
 		openOptions =
 			properties: ['openFile', 'createDirectory']
@@ -161,10 +159,23 @@ class CustomDebugView
 		if folder?
 			@cwdInput.model.buffer.setText folder[0]
 
-	addDebuggerOption: (name) ->
+	updateDebuggers: ->
+		selected = null
+		while @debuggerList.firstChild
+			if @debuggerList.firstChild.selected
+				selected = @debuggerList.firstChild.value
+			@debuggerList.removeChild @debuggerList.firstChild
+
 		option = document.createElement 'option'
-		option.textContent = name
-		@selectDebugger.appendChild option
+		option.textContent = 'automatic'
+		option.value = ''
+		@debuggerList.appendChild option
+
+		for bugger in @bugger.buggers
+			option = document.createElement 'option'
+			option.textContent = bugger.name
+			option.selected = selected==option.value
+			@debuggerList.appendChild option
 
 	startDebugging: ->
 		options = {debugger : null, path: null, args : null, cwd : null}
@@ -172,11 +183,11 @@ class CustomDebugView
 			options.path = @pathInput.model.buffer.lines[0]
 		else
 			return
-		if @selectDebugger.value != 'automatic'
-			options.debugger = @selectDebugger.value
-		if @argsInput.model.buffer.lines[0] != ""
+		if @debuggerList.value != ''
+			options.debugger = @debuggerList.value
+		if @argsInput.model.buffer.lines[0] != ''
 			options.args = [ @argsInput.model.buffer.lines[0] ] # TODO: parse into args?
-		if @cwdInput.model.buffer.lines[0] != ""
+		if @cwdInput.model.buffer.lines[0] != ''
 			options.cwd = @cwdInput.model.buffer.lines[0]
 		@emitter.emit 'close'
 		@bugger.debug options
