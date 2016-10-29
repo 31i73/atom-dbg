@@ -1,5 +1,12 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
+  '.tree-view .file': [
+    {
+      label: 'Debug...',
+      command: 'dbg:custom-debug'
+    }
+    { type: 'separator' }
+  ]
   'atom-text-editor': [
     { label: 'Toggle breakpoint here', command: 'dbg:toggle-breakpoint' }
   ]
@@ -9,9 +16,9 @@ menu: [
     submenu: [
       label: 'Debug'
       submenu: [
-        { label: 'Debug ...', command: 'dbg:custom-debug' }
+        { label: 'Configure debug...', command: 'dbg:custom-debug' }
         { type: 'separator' }
-        { label: 'Continue / Pause', command: 'dbg:pause-continue' }
+        { label: 'Start / Continue / Pause', command: 'dbg:pause-continue' }
         { label: 'Step Over', command: 'dbg:step-over' }
         { label: 'Step in', command: 'dbg:step-in' }
         { label: 'Step Out', command: 'dbg:step-out' }

@@ -54,10 +54,25 @@ module.exports = Debug =
 
 		@disposable = new CompositeDisposable
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:custom-debug': => @customDebug()
+		@disposable.add atom.commands.add '.tree-view .file', 'dbg:custom-debug': =>
+			selectedFile = document.querySelector '.tree-view .file.selected [data-path]'
+			if selectedFile!=null
+				@customDebug
+					path: selectedFile.dataset.path
+					cwd: (require 'path').dirname(selectedFile.dataset.path)
+					args: []
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stop': => @stop()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:continue': => @continue()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause': => @pause()
-		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause-continue': => if @ui.isPaused then @continue() else @pause()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause-continue': =>
+			if @activeBugger
+				if @ui.isPaused then @continue() else @pause()
+			else
+				options = @customPanel.getOptions()
+				if options.path
+					@debug options
+				else
+					@customDebug()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-over': => @stepOver()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-in': => @stepIn()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-out': => @stepOut()
@@ -68,6 +83,7 @@ module.exports = Debug =
 				@toggleBreakpoint textEditor.getPath(), pos.row+1
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:clear-breakpoints': =>
 			@clearBreakpoints()
+		@disposable.add atom.commands.add '.debug-custom-panel', 'dbg:custom-confirm': => @customPanel.startDebugging()
 		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @atomCustomPanel.hide()
 
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
@@ -141,8 +157,10 @@ module.exports = Debug =
 		@atomToolbar?.hide()
 		@atomSidebar?.hide()
 
-	customDebug: ->
+	customDebug: (options) ->
 		@atomCustomPanel.show()
+		if options then @customPanel.setOptions options
+		@customPanel.focus()
 
 	continue: ->
 		unless @ui.isPaused then return

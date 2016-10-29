@@ -8,6 +8,7 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/behind-atom-keymaps-in-depth
 'atom-workspace':
+  'ctrl-shift-f5': 'dbg:custom-debug'
   'f5': 'dbg:pause-continue'
   'f9': 'dbg:toggle-breakpoint'
   'ctrl-shift-f9': 'dbg:clear-breakpoints'
@@ -15,3 +16,6 @@
   'f11': 'dbg:step-in'
   'shift-f11': 'dbg:step-out'
   'shift-f5': 'dbg:stop'
+
+'.debug-custom-panel':
+  'enter': 'dbg:custom-confirm'

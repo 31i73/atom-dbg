@@ -13,7 +13,7 @@ class CustomPanel
 	content: ->
 		@element = document.createElement 'div'
 		@element.setAttribute "tabIndex", -1
-		@element.classList.add 'debug-custom'
+		@element.classList.add 'debug-custom-panel'
 
 		header = document.createElement 'div'
 		header.classList.add 'panel-heading'
@@ -30,7 +30,7 @@ class CustomPanel
 		div = document.createElement 'div'
 		div.classList.add 'input-block-item', 'labeled-block'
 		label = document.createElement 'label'
-		label.textContent = 'Select debugger'
+		label.textContent = 'Debugger:'
 		div.appendChild label
 
 		@debuggerList = document.createElement 'select'
@@ -159,6 +159,28 @@ class CustomPanel
 		if folder?
 			@cwdInput.model.buffer.setText folder[0]
 
+	setOptions: (options) ->
+		if options.debugger
+			for option in @debuggerList.children
+				if option.value == options.debugger
+					option.selected = true
+					break
+
+		if options.path
+			@pathInput.model.setText options.path
+
+		if options.cwd
+			@cwdInput.model.setText options.cwd
+
+		if options.args
+			@argsInput.model.setText options.args.join ' '
+
+	getOptions: ->
+		debugger : @debuggerList.value or null,
+		path: @pathInput.model.getText() or null,
+		args : if args = @argsInput.model.getText() then [args] else [], # TODO: parse into args?
+		cwd : @cwdInput.model.getText() or null
+
 	updateDebuggers: ->
 		selected = null
 		while @debuggerList.firstChild
@@ -178,19 +200,16 @@ class CustomPanel
 			@debuggerList.appendChild option
 
 	startDebugging: ->
-		options = {debugger : null, path: null, args : null, cwd : null}
-		if @pathInput.model.buffer.lines[0] != ""
-			options.path = @pathInput.model.buffer.lines[0]
-		else
+		options = @getOptions()
+
+		if !options.path
 			return
-		if @debuggerList.value != ''
-			options.debugger = @debuggerList.value
-		if @argsInput.model.buffer.lines[0] != ''
-			options.args = [ @argsInput.model.buffer.lines[0] ] # TODO: parse into args?
-		if @cwdInput.model.buffer.lines[0] != ''
-			options.cwd = @cwdInput.model.buffer.lines[0]
+
 		@emitter.emit 'close'
 		@bugger.debug options
+
+	focus: ->
+		@pathInput.focus()
 
 	# Tear down any state and detach
 	destroy: ->
