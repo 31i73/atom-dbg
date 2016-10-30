@@ -2,7 +2,7 @@
 'context-menu':
   '.tree-view .file': [
     {
-      label: 'Debug...',
+      label: 'Debug',
       command: 'dbg:custom-debug'
     }
     { type: 'separator' }
@@ -16,9 +16,9 @@ menu: [
     submenu: [
       label: 'Debug'
       submenu: [
-        { label: 'Configure debug...', command: 'dbg:custom-debug' }
+        { label: 'Configure...', command: 'dbg:custom-debug' }
         { type: 'separator' }
-        { label: 'Start / Continue / Pause', command: 'dbg:pause-continue' }
+        { label: 'Start / Pause / Continue', command: 'dbg:pause-continue' }
         { label: 'Step Over', command: 'dbg:step-over' }
         { label: 'Step in', command: 'dbg:step-in' }
         { label: 'Step Out', command: 'dbg:step-out' }
