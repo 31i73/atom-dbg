@@ -91,6 +91,18 @@ atom-text-editor::shadow {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+	.btn.btn-sm {
+		line-height: 1em;
+	}
+
+	.variable-list {
+		.type {
+			display: none;
+		}
+		&.show-types .type {
+			display: inline;
+		}
+	}
 }
 
 @media (max-width: 1000px) {
@@ -188,4 +200,12 @@ atom-text-editor::shadow {
       width: 100%;
     }
 	}
+}
+
+.debug-variable-tooltip {
+	max-height: 300px;
+	overflow: hidden;
+	line-height: 1.2em;
+	text-align: left;
+	text-overflow: ellipsis;
 }

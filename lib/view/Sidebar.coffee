@@ -9,6 +9,7 @@ class Sidebar
 		@bugger = bugger
 
 		@showSystemStack = false
+		@showVariableTypes = false
 
 		@element = document.createElement 'div'
 		@element.classList.add 'debug-sidebar', 'padded'
@@ -55,12 +56,28 @@ class Sidebar
 		variableHeading.textContent = 'Variables'
 		variableBlock.appendChild variableHeading
 
+		variableOptions = document.createElement 'div'
+		variableOptions.classList.add 'options', 'btn-group', 'btn-toggle'
+		variableHeading.appendChild variableOptions
+
+		@variableOptionTypes = document.createElement 'button'
+		@variableOptionTypes.classList.add 'btn', 'btn-sm', 'icon', 'icon-info'
+		@variableOptionTypes.title = 'Show variable types'
+		@variableOptionTypes.addEventListener 'click', =>
+			@setShowVariableTypes !@showVariableTypes
+
+		@subscriptions.add atom.tooltips.add @variableOptionTypes,
+      title: @variableOptionTypes.title
+      placement: 'bottom'
+
+		variableOptions.appendChild @variableOptionTypes
+
 		variableBody = document.createElement 'div'
 		variableBody.classList.add 'panel-body', 'padded'
 		variableBlock.appendChild variableBody
 
 		@variableList = document.createElement 'ul'
-		@variableList.classList.add 'list-tree', 'has-collapsable-children'
+		@variableList.classList.add 'list-tree', 'has-collapsable-children', 'variable-list'
 		variableBody.appendChild @variableList
 
 		@expandedVariables = {}
@@ -87,7 +104,7 @@ class Sidebar
 			frame = stack[i]
 			listItem = document.createElement 'li'
 			listItem.classList.add 'list-item'
-			
+
 			if frame.error
 				listItem.classList.add 'text-error'
 
@@ -116,6 +133,11 @@ class Sidebar
 			text = document.createTextNode ' ' + frame.path + (if frame.line then ':'+frame.line else '')
 			item.appendChild text
 
+	setShowVariableTypes: (visible) ->
+		@showVariableTypes = visible
+		@variableOptionTypes.classList.toggle 'selected', visible
+		@variableList.classList.toggle 'show-types', @showVariableTypes
+
 	updateVariables: (variables) ->
 		while @variableList.firstChild
 			@variableList.removeChild @variableList.firstChild
@@ -124,6 +146,7 @@ class Sidebar
 			stringName = variable.name
 			stringType = if variable.type then ' : ' + variable.type else ''
 			stringValue = if variable.value then ' = ' + variable.value else ''
+			title = if variable.type or variable.value then "<strong>#{stringName}</strong>" + stringType + (if variable.value then ' = ' + (variable.value.replace /\n/g,'<br />') else '') else null
 
 			listItem = null
 
@@ -134,7 +157,6 @@ class Sidebar
 
 				listItem = document.createElement 'div'
 				listItem.classList.add 'list-item'
-				listItem.setAttribute 'title', stringName + stringType + stringValue
 				listItem.addEventListener 'click', =>
 					tree.classList.toggle 'collapsed'
 					if branch.childNodes.length<1
@@ -151,8 +173,13 @@ class Sidebar
 			else
 				listItem = document.createElement 'li'
 				listItem.classList.add 'list-item'
-				listItem.setAttribute 'title', stringName + stringType + stringValue
 				list.appendChild listItem
+
+			if title
+				@subscriptions.add atom.tooltips.add listItem,
+					html: true
+					title: "<div class='debug-variable-tooltip'>#{title}</div>"
+					placement: 'top'
 
 			item = document.createElement 'span'
 			listItem.appendChild item
@@ -161,7 +188,12 @@ class Sidebar
 			text.textContent = stringName
 			item.appendChild text
 
-			text = document.createTextNode stringType + stringValue
+			text = document.createElement 'span'
+			text.classList.add 'type'
+			text.textContent = stringType
+			item.appendChild text
+
+			text = document.createTextNode stringValue
 			item.appendChild text
 
 		for variable in variables
