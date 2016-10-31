@@ -86,25 +86,18 @@ module.exports = Debug =
 		@disposable.add atom.commands.add '.debug-custom-panel', 'dbg:custom-confirm': => @customPanel.startDebugging()
 		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @atomCustomPanel.hide()
 
+		# install any text editors which are or become sourcecode (give them a clickable gutter)
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
-			path = textEditor.getPath()
+			disposed = false
+			@disposable.add observeGrammar = textEditor.observeGrammar (grammar) =>
+				if /^source\./.test grammar.scopeName
+					@installTextEditor textEditor
+					disposed = true
+					observeGrammar?.dispose()
 
-			gutter = null
-			getGutter = () ->
-				if !gutter
-					gutter = textEditor.addGutter
-						name: 'debug-gutter'
-						priority: -200
-						visible: true
-				return gutter
+			if disposed then observeGrammar.dispose()
 
-			for breakpoint in @breakpoints
-				if breakpoint.path == path
-					marker = textEditor.markBufferRange [[breakpoint.line-1, 0], [breakpoint.line-1, 0]]
-					getGutter().decorateMarker marker,
-						type: 'line-number'
-						'class': 'debug-breakpoint'
-
+		# restore previous breakpoints
 		if state.breakpoints
 			for breakpoint in state.breakpoints
 				@addBreakpoint breakpoint.path, breakpoint.line
@@ -122,6 +115,50 @@ module.exports = Debug =
 				line: breakpoint.line
 
 		return data
+
+	installTextEditor: (textEditor) ->
+		path = textEditor.getPath()
+		gutter = textEditor.gutterWithName('debug-gutter')
+
+		if gutter then return
+
+		gutter = textEditor.addGutter
+			name: 'debug-gutter'
+			priority: -200
+			visible: true
+
+		for breakpoint in @breakpoints
+			if breakpoint.path == path
+				marker = textEditor.markBufferRange [[breakpoint.line-1, 0], [breakpoint.line-1, 0]]
+				gutter.decorateMarker marker,
+					type: 'line-number'
+					'class': 'debug-breakpoint'
+				breakpoint.markers.push marker
+
+		getEventRow = (event) ->
+			screenPos = textEditorElement.component.screenPositionForMouseEvent event
+			bufferPos = textEditor.bufferPositionForScreenPosition screenPos
+			return bufferPos.row
+
+		textEditorElement = textEditor.getElement()
+		gutterContainer = textEditorElement.shadowRoot.querySelector '.gutter-container'
+		gutterContainer.addEventListener 'mousemove', (event) =>
+			row = getEventRow event
+
+			marker = textEditor.markBufferRange [[row, 0], [row, 0]]
+			@breakpointHint?.destroy()
+			@breakpointHint = gutter.decorateMarker marker,
+				type: 'line-number'
+				'class': 'debug-breakpoint-hint'
+
+		(atom.views.getView gutter).addEventListener 'click', (event) =>
+			row = getEventRow event
+			@toggleBreakpoint textEditor.getPath(), row+1
+
+		gutterContainer.addEventListener 'mouseout', =>
+			@breakpointHint?.destroy()
+			@breakpointHint = null
+
 
 	debug: (options) ->
 		return new Promise (resolve) =>
@@ -188,12 +225,8 @@ module.exports = Debug =
 
 		for editor in atom.workspace.getTextEditors()
 			if editor.getPath() == path
+				@installTextEditor editor
 				gutter = editor.gutterWithName 'debug-gutter'
-				if !gutter
-					gutter = editor.addGutter
-						name: 'debug-gutter'
-						priority: -200
-						visible: true
 				marker = editor.markBufferRange [[line-1, 0], [line-1, 0]]
 				gutter.decorateMarker marker,
 					type: 'line-number'
