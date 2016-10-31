@@ -11,8 +11,16 @@ Supports:
 * Call stack display
 * Local variable display
 
+Current available backends:  
+
+* [dbg-gdb](https://atom.io/packages/dbg-gdb) - Debug with gdb
+
+*Please install a backend to get started!*
+
 ## Commands:
 
+`dbg:custom-debug` - Opens the debug configuration panel  
+`dbg:debug` - Begins a new debug session, continues a paused, or opens the config panel if no settings present  
 `dbg:continue` - Continue  
 `dbg:pause` - Pause  
 `dbg:pause-continue` - Toggle pause/continue  
@@ -34,10 +42,11 @@ Returns an object with the following events and functions:
 
 ### Functions:
 
-`debug(options):Promise<Bool>` - Attempt to start a new debug session (any existing session will be `stop()`ed first)
+`debug(options?):Promise<Bool>` - Attempt to start a new debug session (any existing session will be `stop()`ed first)
 
-Example: `dbg.debug({ path: './myProg', args: ['testmode'] });`  
-> `options` - An object with the following properties:
+Example: `dbg.debug({ path: './myProg', args: ['testmode'] });`
+
+> `options` - An optional object with the following properties:
 
 >> `debugger` - *Optional*. The name of the dbg provider to use. (This can be omitted to auto-detect)  
 >> `path` - *Optional*. The path to the file to debug  
@@ -49,9 +58,20 @@ Example: `dbg.debug({ path: './myProg', args: ['testmode'] });`
 > The first provider to respond as being compatible will be selected  
 > Note that the options supported vary depending on dbg providers, but `path`, `args` and `cwd` are recommended as defaults if relevant to the target  
 
-> Returns a promise that fulfills to `true` if a valid dbg provider is found, or `false` if not
+Returns a promise that fulfills as `true` if a valid dbg provider is found, or `false` if not.
+
+If no options are passed and the user has configured valid settings in the config panel, these will be used instead. Alternatively, the config panel will be displayed and the returned promise will immediately fulfill as `true`.
 
 `stop()` - Cancel the currently active debug session  
+
+`customDebug(options?)` - Displays the configuration panel  
+
+> `options` - An optional object with the following properties:
+
+>> `debugger` - *Optional*. The name of the dbg provider to use. If set to an empty string, ``"automatic"`` will be selected  
+>> `path` - *Optional*. The path to the file to debug  
+>> `args` - *Optional*. An array of arguments to pass to the file being debugged  
+>> `cwd` - *Optional*. The working directory to use when debugging
 
 `continue()` - Continue  
 `pause()` - Pause  

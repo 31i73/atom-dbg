@@ -25,6 +25,8 @@ module.exports = Debug =
 		@provider.debug = @debug.bind this
 		@provider.stop = @stop.bind this
 
+		@provider.customDebug = @customDebug.bind this
+
 		@provider.continue = @continue.bind this
 		@provider.pause = @pause.bind this
 		@provider.pause_continue = => if @ui.isPaused then @continue() else @pause()
@@ -64,6 +66,15 @@ module.exports = Debug =
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stop': => @stop()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:continue': => @continue()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause': => @pause()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:debug': =>
+			if @activeBugger
+				if @ui.isPaused then @continue()
+			else
+				options = @customPanel.getOptions()
+				if options.path
+					@debug options
+				else
+					@customDebug()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause-continue': =>
 			if @activeBugger
 				if @ui.isPaused then @continue() else @pause()
@@ -162,6 +173,11 @@ module.exports = Debug =
 
 	debug: (options) ->
 		return new Promise (resolve) =>
+			if !options
+				@customDebug()
+				resolve true
+				return
+
 			if options['debugger']
 				for bugger in @buggers
 					if bugger.name == options['debugger']
