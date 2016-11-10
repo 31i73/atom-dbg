@@ -87,6 +87,9 @@ class Ui
 		# @bugger.atomSidebar.hide()
 
 	paused: ->
+		currentWindow = (require 'electron').remote.getCurrentWindow()
+		currentWindow.focus();
+
 		@isPaused = true
 		@bugger.toolbar.updateButtons()
 		@bugger.atomSidebar.show()
