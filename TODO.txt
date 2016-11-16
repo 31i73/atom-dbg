@@ -1,0 +1,4 @@
+- Toggle the visibility of inline hints, rather than remove them, when inline hints are toggled
+
+	Inline hints are currently rendered as block decorations in atom. However, toggling the visibility of a block decoration (via css class toggle) does not trigger a reflow in atom, causing odd empty spaces until another reflow event occurrs.
+	Ideally I'd like to hide them, while still maintaining their associative position in the source (so if code above them is inserted/deleted I'd like them to move with the sourceline they're associated with, not snap back to an old position upon toggle)

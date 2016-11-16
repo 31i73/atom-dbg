@@ -10,6 +10,8 @@ class Toolbar
 		@element = document.createElement 'div'
 		@element.classList.add 'debug-toolbar', 'tool-panel'
 
+		@showHints = true
+
 		svg = document.createElement 'div'
 		svg.innerHTML =
 			'''
@@ -49,9 +51,28 @@ class Toolbar
 
 			return icon
 
+		@options = document.createElement 'div'
+		@options.classList.add 'options'
+		@element.appendChild @options
+
 		buttonToolbar = document.createElement 'div'
 		buttonToolbar.classList.add 'btn-toolbar'
 		@element.appendChild buttonToolbar
+
+		optionGroup = document.createElement 'div'
+		optionGroup.classList.add 'btn-group'
+		optionGroup.classList.add 'options'
+		buttonToolbar.appendChild optionGroup
+
+		@buttonHints = document.createElement 'button'
+		@buttonHints.classList.add 'btn', 'icon', 'icon-comment', 'selected'
+		@buttonHints.addEventListener 'click', =>
+			@bugger.ui.setShowHints !@bugger.ui.showHints
+		@subscriptions.add atom.tooltips.add @buttonHints, title: 'Show inline hints'
+		optionGroup.appendChild @buttonHints
+
+		@bugger.ui.emitter.on 'setShowHints', (set) =>
+			@buttonHints.classList.toggle 'selected', set
 
 		buttonGroup = document.createElement 'div'
 		buttonGroup.classList.add 'btn-group'

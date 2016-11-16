@@ -217,16 +217,21 @@ module.exports = Debug =
 
 	continue: ->
 		unless @ui.isPaused then return
+		@ui.isStepping = false
 		@activeBugger?.continue()
 	pause: ->
 		if @ui.isPaused then return
+		@ui.isStepping = false
 		@activeBugger?.pause()
 
 	stepIn: ->
+		@ui.isStepping = true
 		@activeBugger?.stepIn()
 	stepOver: ->
+		@ui.isStepping = true
 		@activeBugger?.stepOver()
 	stepOut: ->
+		@ui.isStepping = true
 		@activeBugger?.stepOut()
 
 	addBreakpoint: (path, line) ->
@@ -296,8 +301,7 @@ module.exports = Debug =
 		if @activeBugger
 			@activeBugger.stop()
 			@activeBugger = null
-			@ui.setStack []
-			@ui.setVariables []
+			@ui.clearAll()
 			@hide()
 			@provider.emit 'stop'
 
