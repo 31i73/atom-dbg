@@ -89,9 +89,13 @@ atom-text-editor::shadow {
 		display: flex;
 		flex-direction: column;
 		position: relative;
-		flex: 1 0 0;
+		flex: 1 0;
 		min-height: 75px;
 		overflow: hidden;
+
+		&.variables {
+			flex: 2 0;
+		}
 
 		+ .inset-panel {
 			margin-top: @component-padding;

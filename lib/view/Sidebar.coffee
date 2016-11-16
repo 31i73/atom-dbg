@@ -15,7 +15,7 @@ class Sidebar
 		@element.classList.add 'debug-sidebar', 'padded'
 
 		stackBlock = document.createElement 'div'
-		stackBlock.classList.add 'inset-panel'
+		stackBlock.classList.add 'inset-panel', 'stack'
 		@element.appendChild stackBlock
 
 		stackHeading = document.createElement 'div'
@@ -48,7 +48,7 @@ class Sidebar
 		stackBody.appendChild @stackList
 
 		variableBlock = document.createElement 'div'
-		variableBlock.classList.add 'inset-panel'
+		variableBlock.classList.add 'inset-panel', 'variables'
 		@element.appendChild variableBlock
 
 		variableHeading = document.createElement 'div'
