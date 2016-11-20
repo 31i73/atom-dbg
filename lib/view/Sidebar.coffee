@@ -43,9 +43,11 @@ class Sidebar
 		stackBody.classList.add 'panel-body', 'padded'
 		stackBlock.appendChild stackBody
 
-		@stackList = document.createElement 'ul'
-		@stackList.classList.add 'list-group'
-		stackBody.appendChild @stackList
+		stackListTable = document.createElement 'table'
+		stackBody.appendChild stackListTable
+
+		@stackListTBody = document.createElement 'tbody'
+		stackListTable.appendChild @stackListTBody
 
 		variableBlock = document.createElement 'div'
 		variableBlock.classList.add 'inset-panel', 'variables'
@@ -92,46 +94,59 @@ class Sidebar
 	setShowSystemStack: (visible) ->
 		@showSystemStack = visible
 		@stackOptionSystem.classList.toggle 'selected', visible
-		for element in @stackList.childNodes
+		for element in @stackListTBody.childNodes
 			if !(element.classList.contains 'local')
 				element.style.display = if visible then '' else 'none'
 
 	updateStackList: (stack) ->
-		while @stackList.firstChild
-			@stackList.removeChild @stackList.firstChild
+		while @stackListTBody.firstChild
+			@stackListTBody.removeChild @stackListTBody.firstChild
 
 		if stack.length>0 then for i in [0..stack.length-1]
 			frame = stack[i]
-			listItem = document.createElement 'li'
-			listItem.classList.add 'list-item'
 
+			listRow = document.createElement 'tr'
 			if frame.error
-				listItem.classList.add 'text-error'
+				listRow.classList.add 'text-error'
 
 			if frame.local
-				listItem.classList.add 'local'
+				listRow.classList.add 'local'
 			else
 				if !@showSystemStack
-					listItem.style.display = 'none'
+					listRow.style.display = 'none'
 
 			do (i) =>
-				listItem.addEventListener 'click', => @bugger.activeBugger?.selectFrame i
-			@stackList.insertBefore listItem, @stackList.firstChild
+				listRow.addEventListener 'click', => @bugger.activeBugger?.selectFrame i
+			@stackListTBody.insertBefore listRow, @stackListTBody.firstChild
 
-			item = document.createElement 'span'
-			item.setAttribute 'title', frame.name + ' - ' + frame.path
-			if frame.local
-				item.classList.add 'icon', 'icon-file-text'
-			else
-				item.classList.add 'no-icon'
-			listItem.appendChild item
+			listRow.setAttribute 'title', frame.name + ' - ' + frame.path + (if frame.line then ':'+frame.line else '')
 
-			text = document.createElement 'strong'
+			cellLocation = document.createElement 'td'
+			listRow.appendChild cellLocation
+
+			text = document.createElement 'code'
+			text.classList.add 'identifier'
 			text.textContent = frame.name
-			item.appendChild text
+			cellLocation.appendChild text
 
-			text = document.createTextNode ' ' + frame.path + (if frame.line then ':'+frame.line else '')
-			item.appendChild text
+			cellPath = document.createElement 'td'
+			listRow.appendChild cellPath
+
+			path = document.createElement 'span'
+			path.classList.add 'path'
+			cellPath.appendChild path
+
+			icon = document.createElement 'span'
+			if frame.local
+				icon.classList.add 'icon', 'icon-file-text'
+			else
+				icon.classList.add 'no-icon'
+			path.appendChild icon
+
+			text = document.createElement 'span'
+			text.classList.add 'filepath'
+			text.textContent = frame.path + (if frame.line then ':'+frame.line else '')
+			path.appendChild text
 
 	setShowVariableTypes: (visible) ->
 		@showVariableTypes = visible
@@ -144,9 +159,9 @@ class Sidebar
 
 		addItem = (list, name, variable) =>
 			stringName = variable.name
-			stringType = if variable.type then ' : ' + variable.type else ''
-			stringValue = if variable.value then ' = ' + variable.value else ''
-			title = if variable.type or variable.value then "<strong>#{stringName}</strong>" + stringType + (if variable.value then ' = ' + (variable.value.replace /\n/g,'<br />') else '') else null
+			stringType = if variable.type then ' (' + variable.type + ') ' else null
+			stringValue = if variable.value then variable.value else null
+			title = if variable.type or variable.value then "<strong>#{stringName}</strong>" + stringType + (if variable.value then ': ' + (variable.value.replace /\n/g,'<br />') else '') else null
 
 			listItem = null
 
@@ -181,10 +196,11 @@ class Sidebar
 					title: "<div class='debug-variable-tooltip'>#{title}</div>"
 					placement: 'top'
 
-			item = document.createElement 'span'
+			item = document.createElement 'code'
 			listItem.appendChild item
 
-			text = document.createElement 'strong'
+			text = document.createElement 'span'
+			text.classList.add 'identifier'
 			text.textContent = stringName
 			item.appendChild text
 
@@ -193,16 +209,22 @@ class Sidebar
 			text.textContent = stringType
 			item.appendChild text
 
-			text = document.createTextNode stringValue
-			item.appendChild text
+			if stringValue != null
+				text = document.createTextNode ': '
+				item.appendChild text
+
+				text = document.createElement 'span'
+				text.classList.add 'value'
+				text.textContent = stringValue
+				item.appendChild text
 
 		for variable in variables
 			addItem @variableList, variable.name, variable
 
 	setFrame: (index) ->
-		index = @stackList.childNodes.length-1-index #reverse it
-		if @stackList.childNodes.length>0 then for i in [0..@stackList.childNodes.length-1]
+		index = @stackListTBody.childNodes.length-1-index #reverse it
+		if @stackListTBody.childNodes.length>0 then for i in [0..@stackListTBody.childNodes.length-1]
 			if i==index
-				@stackList.childNodes[i].classList.add 'selected'
+				@stackListTBody.childNodes[i].classList.add 'selected'
 			else
-				@stackList.childNodes[i].classList.remove 'selected'
+				@stackListTBody.childNodes[i].classList.remove 'selected'

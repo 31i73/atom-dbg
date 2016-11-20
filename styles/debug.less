@@ -4,6 +4,7 @@
 // for a full listing of what's available.
 
 @import "ui-variables";
+@import "ui-variables";
 
 .debug {
 }
@@ -73,9 +74,9 @@ atom-text-editor::shadow {
 	.btn .icon {
 		display: inline-block;
 		width: 17px;
-    height: 19px;
-    fill: currentColor;
-    vertical-align: middle;
+		height: 19px;
+		fill: currentColor;
+		vertical-align: middle;
 		margin-top: -2px;
 	}
 
@@ -141,6 +142,53 @@ atom-text-editor::shadow {
 			display: inline;
 		}
 	}
+
+	table {
+		width: 100%;
+		margin: 0;
+		line-height: @component-line-height;
+		white-space: nowrap;
+		overflow: hidden;
+		cursor: default;
+
+		tr.selected > td:first-child {
+			width: 100%;
+		}
+
+		tr.selected > td::before {
+			content: '';
+			background-color: @background-color-selected;
+			position: absolute;
+			left: 0;
+			right: 0;
+			height: @component-line-height;
+			z-index: 0;
+		}
+
+		tr > td > * {
+			position: relative;
+			z-index: 1;
+		}
+
+		.no-icon {
+			display: inline-block;
+			padding-left: @component-icon-padding + @component-icon-size;
+		}
+	}
+
+	code {
+		font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+		font-size: 1em;
+		color: @syntax-text-color;
+		background: transparent;
+		.identifier {
+			// color: @syntax-color-variable;
+		}
+		.value {
+			// color: @syntax-color-constant;
+			color: @text-color-info;
+		}
+	}
 }
 
 @media (max-width: 1000px) {
@@ -181,20 +229,20 @@ atom-text-editor::shadow {
 		}
 	}
 	.header {
-    padding: @component-padding/4 @component-padding/2;
-    min-width: @min-width;
-  }
-  .header-item {
-    margin: @component-padding/4 0;
-  }
+		padding: @component-padding/4 @component-padding/2;
+		min-width: @min-width;
+	}
+	.header-item {
+		margin: @component-padding/4 0;
+	}
 	.btn-group {
-    display: flex;
+		display: flex;
 		flex: 1 1 @button-width;
 		min-width: @button-width;
-  }
+	}
 	.btn-item {
 		flex: auto;
-  }
+	}
 	.input-block {
 		display: flex;
 		flex-wrap: wrap;
@@ -216,27 +264,27 @@ atom-text-editor::shadow {
 		margin-left: @component-padding;
 	}
 	.input-inline-block {
-    display: inline-block;
+		display: inline-block;
 		flex: auto;
-  }
+	}
 	.inline-block-start {
-    display: flex;
+		display: flex;
 		flex: none;
 		padding: @component-padding / 2;
-  }
+	}
 	.input-block-item {
-    display: flex;
+		display: flex;
 		flex: 1;
 		padding: @component-padding / 2;
-  }
-  .input-block-item--flex {
-    flex: 100 1 @item-width;
-  }
+	}
+	.input-block-item--flex {
+		flex: 100 1 @item-width;
+	}
 	.editor-container {
-    position: relative;
-    atom-text-editor {
-      width: 100%;
-    }
+		position: relative;
+		atom-text-editor {
+			width: 100%;
+		}
 	}
 }
 
@@ -251,7 +299,7 @@ atom-text-editor::shadow {
 .debug-hint-block {
 	cursor: default;
 	white-space: nowrap;
-  overflow: hidden;
+	overflow: hidden;
 	text-overflow: ellipsis;
 
 	&.hidden {
@@ -294,7 +342,7 @@ atom-text-editor::shadow {
 	cursor: default;
 	border-radius: @component-border-radius;
 	padding: 0 4px 1px;
-  overflow: hidden;
+	overflow: hidden;
 	text-overflow: ellipsis;
 	color: contrast(@background-color-info);
 	background: @background-color-info;
