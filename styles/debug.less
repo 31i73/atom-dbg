@@ -69,7 +69,11 @@ atom-text-editor::shadow {
 
 .debug-toolbar {
 	padding: @component-padding / 2;
-	border-bottom: 1px solid @base-border-color;
+
+	.btn-toolbar {
+		margin-left: 0;
+		margin-right: 0;
+	}
 
 	.btn .icon {
 		display: inline-block;
@@ -314,6 +318,7 @@ atom-text-editor::shadow {
 	.content {
 		position: relative;
 		margin-top: 8px;
+		margin-bottom: 4px;
 		display: inline-block;
 		font-size: 90%;
 		color: @text-color-info;
