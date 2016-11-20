@@ -8,7 +8,9 @@
     { type: 'separator' }
   ]
   'atom-text-editor': [
+    { type: 'separator' }
     { label: 'Toggle breakpoint here', command: 'dbg:toggle-breakpoint' }
+    { type: 'separator' }
   ]
 menu: [
   {
