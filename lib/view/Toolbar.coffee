@@ -133,7 +133,7 @@ class Toolbar
 			@buttonPause.classList.add 'selected'
 			@buttonStepIn.disabled = false
 			@buttonStepOver.disabled = false
-			@buttonStepOut.disabled = false
+			@buttonStepOut.disabled = @bugger.ui.currentFrame < 1
 		else
 			@buttonPlay.classList.add 'selected'
 			@buttonPause.classList.remove 'selected'

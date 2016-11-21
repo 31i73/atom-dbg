@@ -17,6 +17,7 @@ class Ui
 		@stack = []
 		@currentPath = null
 		@currentLine = 0
+		@currentFrame = 0
 		@variables = []
 		@lastVariables = {}
 		@lastLines = {}
@@ -97,7 +98,9 @@ class Ui
 
 		@currentPath = frame.file
 		@currentLine = frame.line
+		@currentFrame = index
 
+		@bugger.toolbar.updateButtons()
 		@setLocation frame.file, frame.line
 
 	clearEditorMarkers: ->

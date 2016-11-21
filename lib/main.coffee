@@ -231,6 +231,7 @@ module.exports = Debug =
 		@ui.isStepping = true
 		@activeBugger?.stepOver()
 	stepOut: ->
+		if @ui.currentFrame < 1 then return
 		@ui.isStepping = true
 		@activeBugger?.stepOut()
 
