@@ -156,7 +156,7 @@ class Ui
 			indent = document.createElement 'div'
 			indent.classList.add 'indent'
 			atom.config.observe 'editor.tabLength', (w) ->
-				indent.textContent = Array(w+1).join(' ');
+				indent.textContent = Array(lineIndent*w + 1).join(' ');
 			element.appendChild indent
 
 			content = document.createElement 'div'
