@@ -20,7 +20,7 @@ class Ui
 		@currentFrame = 0
 		@variables = []
 		@lastVariables = {}
-		@lastLines = {}
+		@lastPosition = {}
 		@markers = []
 		@openFiles = {}
 		@hintMarkers = {}
@@ -67,7 +67,7 @@ class Ui
 
 		if @currentPath
 			lastVariables = @lastVariables[@currentPath]
-			lastLine = @lastLines[@currentPath]
+			lastPosition = @lastPosition[@currentPath]
 			if !lastVariables
 				lastVariables = @lastVariables[@currentPath] = {}
 
@@ -83,7 +83,15 @@ class Ui
 				lastVariables[variable.name] = variable
 
 			if @isStepping && updateMessages.length
-				@setHint @currentPath, lastLine, updateMessages.join '\n'
+				if !lastPosition
+					@setHint @currentPath, @currentLine, updateMessages.join '\n'
+
+				else if @currentFrame > lastPosition.frame
+					# if we've entered a new scope then place any new variables at the point of entry, not at the callee (as they're likely parameters)
+					@setHint @currentPath, (Math.max @currentLine-1, 1), updateMessages.join '\n'
+
+				else
+					@setHint @currentPath, lastPosition.line, updateMessages.join '\n'
 
 		@bugger.sidebar.updateVariables @variables
 
@@ -94,7 +102,9 @@ class Ui
 			@bugger.sidebar.setShowSystemStack true
 
 		if frame.file != @currentPath || frame.line != @currentLine
-			@lastLines[@currentPath] = @currentLine
+			@lastPosition[@currentPath] =
+				line: @currentLine
+				frame: @currentFrame
 
 		@currentPath = frame.file
 		@currentLine = frame.line
@@ -184,7 +194,7 @@ class Ui
 		@currentLine = 0
 		@variables = []
 		@lastVariables = {}
-		@lastLines = {}
+		@lastPositions = {}
 		@isPaused = false
 		@isStepping = false
 		@clearHints()
