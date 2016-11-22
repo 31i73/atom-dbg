@@ -161,7 +161,7 @@ class Sidebar
 			stringName = variable.name
 			stringType = if variable.type then ' (' + variable.type + ') ' else null
 			stringValue = if variable.value then variable.value else null
-			title = if variable.type or variable.value then "<strong>#{stringName}</strong>" + stringType + (if variable.value then ': ' + (variable.value.replace /\n/g,'<br />') else '') else null
+			title = if stringName and (stringType or stringValue) then "<strong>#{stringName}</strong>" + stringType + (if stringValue then (if stringName then ': ' else '') + (stringValue.replace /\n/g,'<br />') else '') else null
 
 			listItem = null
 
@@ -210,10 +210,11 @@ class Sidebar
 			item.appendChild text
 
 			if stringValue != null
-				text = document.createTextNode ': '
-				item.appendChild text
+				if stringName
+					text = document.createTextNode ': '
+					item.appendChild text
 
-				text = document.createElement 'span'
+				text = document.createElement if stringName then 'span' else 'em'
 				text.classList.add 'value'
 				text.textContent = stringValue
 				item.appendChild text
