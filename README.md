@@ -2,14 +2,18 @@
 
 An interactive debugger frontend
 
-![Debug screenshot](http://i.imgur.com/Nv5StoZ.png)
+![Debug screenshot](http://i.imgur.com/tsQESdU.png)
+
+![Debug screenshot](http://i.imgur.com/BdBA0yR.png)
 
 Supports:
 
 * Breakpoints
-* Continue/pause/stop/step-over/step-in/step-out
-* Call stack display
-* Local variable display
+* Interactive debugger controls (Continue/pause/stop/step-over/step-in/step-out)
+* Inline hints automatically mark changed variables when stepping through code
+* Browsable callstack
+* Local variable browsing
+* Multiple debugger backends via provided `dbg` service
 
 Current available backends:  
 

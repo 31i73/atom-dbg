@@ -1,3 +1,12 @@
+## 1.3.0
+* Added: Inline hint system which automatically tracks changed variables when stepping through a program and marks these events within the source
+* Added: Atom now auto-focuses when a running program is interrupted and the debugger is activated
+* Improved: Variable and stacktrace sidebar
+	* Improved: Style improvements for easier reading (all code and identifiers now in monospace, values colour-coded and stacktrace aligned into columns)
+	* Fixed: Scrolling would also scroll the header out of view
+	* Changed: Ratio is now fixed at 2:1 for variables:stack-trace
+* Fixed: The "step-out" button was still enabled when at the top of the stack and would cause debugger errors if clicked
+
 ## 1.2.0
 * Added: Exciting new configuration panel for setting up debugs (thanks to [vanossj](https://github.com/vanossj)!)
 	* Right-clicking a file from the treeview and selecting **Debug** will now open the config panel, with that path and working directory selected
