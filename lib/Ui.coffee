@@ -86,8 +86,8 @@ class Ui
 				if !lastPosition
 					@setHint @currentPath, @currentLine, updateMessages.join '\n'
 
-				else if @currentFrame > lastPosition.frame
-					# if we've entered a new scope then place any new variables at the point of entry, not at the callee (as they're likely parameters)
+				else if @currentFrame != lastPosition.frame
+					# if we've entered a new scope (presumably either entering a new, or returning from an old function). Place any new variables just above the current position, not at the previous scope
 					@setHint @currentPath, (Math.max @currentLine-1, 1), updateMessages.join '\n'
 
 				else
@@ -124,8 +124,18 @@ class Ui
 		textEditor = @openFiles[filename]
 		if !textEditor then return
 
-		line = (textEditor.lineTextForBufferRow lineNumber-1)||''
+		loop
+			line = (textEditor.lineTextForBufferRow lineNumber-1)||''
+
+			# go up a line if the current is empty
+			if lineNumber > 1 && /^\s*$/.test line
+				lineNumber--
+				continue
+			else
+				break
+
 		lineWidth = line.length
+
 		lineIndent = textEditor.indentationForBufferRow lineNumber-1
 		lineMarker = textEditor.markBufferRange [[lineNumber-1, lineIndent], [lineNumber-1, lineWidth]]
 
