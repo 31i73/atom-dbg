@@ -199,7 +199,11 @@ module.exports = Debug =
 
 			(Promise.all promises).then =>
 				if !resolved
-					@ui.showError 'No compatible debugger for this'
+					console.log options
+					if options.path
+						@ui.showError 'Could not detect an installed debugger compatible with this file'
+					else
+						@ui.showError 'Could not detect an installed debugger compatible withthese options'
 					resolve false
 
 	show: ->
