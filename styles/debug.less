@@ -355,3 +355,12 @@ atom-text-editor::shadow {
 	border-bottom: 1px solid darken(@background-color-info, 4%);
 	box-shadow: 0 1px 5px rgba(0,0,0,0.3);
 }
+
+.debug-fadein {
+	animation: debug-fadein 2s;
+}
+
+@keyframes debug-fadein {
+	  0% { opacity: 0; }
+	100% { opacity: 1; }
+}
