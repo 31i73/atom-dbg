@@ -6,6 +6,8 @@
 	* Fixed: Scrolling would also scroll the header out of view
 	* Changed: Ratio is now fixed at 2:1 for variables:stack-trace
 * Fixed: The "step-out" button was still enabled when at the top of the stack and would cause debugger errors if clicked
+* #### 1.3.1
+	* Fixed: Sidebar font sizes were too small with certain themes, and colours not always readable ([#6 - dcarrera](https://github.com/31i73/atom-dbg/issues/6))
 
 ## 1.2.0
 * Added: Exciting new configuration panel for setting up debugs (thanks to [vanossj](https://github.com/vanossj)!)
