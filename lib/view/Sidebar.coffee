@@ -175,10 +175,25 @@ class Sidebar
 				listItem.addEventListener 'click', =>
 					tree.classList.toggle 'collapsed'
 					if branch.childNodes.length<1
+						loaderItem = document.createElement 'li'
+						loaderItem.classList.add 'list-item'
+						branch.appendChild loaderItem
+
+						# loader = document.createElement 'progress'
+						# loader.classList.add 'inline-block', 'debug-fadein'
+						# loaderItem.appendChild loader
+
+						loader = document.createElement 'span'
+						loader.classList.add 'loading', 'loading-spinner-tiny', 'inline-block', 'debug-fadein'
+						loaderItem.appendChild loader
+
 						@bugger.activeBugger?.getVariableChildren name
 							.then (children) =>
+								branch.removeChild loaderItem
 								for child in children
 									addItem branch, name+'.'+child.name, child
+							, =>
+								branch.removeChild loaderItem
 
 				tree.appendChild listItem
 
