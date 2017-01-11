@@ -2,6 +2,7 @@ Ui = require './Ui'
 Toolbar = require './view/Toolbar'
 Sidebar = require './view/Sidebar'
 CustomPanel = require './view/CustomPanel'
+CustomDebugConfigs = require './debugConfigurations'
 
 {CompositeDisposable, Emitter} = require 'atom'
 
@@ -18,6 +19,7 @@ module.exports = Debug =
 	buggers: []
 	activeBugger: null
 	breakpoints: []
+	debugConfigs: null
 
 	activate: (state) ->
 		@provider = new Emitter()
@@ -112,6 +114,8 @@ module.exports = Debug =
 		if state.breakpoints
 			for breakpoint in state.breakpoints
 				@addBreakpoint breakpoint.path, breakpoint.line
+
+		@debugConfigs = new CustomDebugConfigs
 
 	deactivate: ->
 		@disposable.dispose()
