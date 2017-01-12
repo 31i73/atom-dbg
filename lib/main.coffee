@@ -152,7 +152,7 @@ module.exports = Debug =
 			return bufferPos.row
 
 		textEditorElement = textEditor.getElement()
-		gutterContainer = textEditorElement.shadowRoot.querySelector '.gutter-container'
+		gutterContainer = textEditorElement.querySelector '.gutter-container'
 		gutterContainer.addEventListener 'mousemove', (event) =>
 			row = getEventRow event
 
