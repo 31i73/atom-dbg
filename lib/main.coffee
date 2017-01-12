@@ -2,6 +2,7 @@ Ui = require './Ui'
 Toolbar = require './view/Toolbar'
 Sidebar = require './view/Sidebar'
 CustomPanel = require './view/CustomPanel'
+ConfigList = require './view/ConfigList'
 CustomDebugConfigs = require './debugConfigurations'
 
 {CompositeDisposable, Emitter} = require 'atom'
@@ -98,6 +99,7 @@ module.exports = Debug =
 			@clearBreakpoints()
 		@disposable.add atom.commands.add '.debug-custom-panel', 'dbg:custom-confirm': => @customPanel.startDebugging()
 		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @atomCustomPanel.hide()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:select-config': => @selectConfig()
 
 		# install any text editors which are or become sourcecode (give them a clickable gutter)
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
@@ -116,6 +118,10 @@ module.exports = Debug =
 				@addBreakpoint breakpoint.path, breakpoint.line
 
 		@debugConfigs = new CustomDebugConfigs
+		@configList = new ConfigList
+		@atomConfigList = atom.workspace.addModalPanel item: @configList, visible: false
+		@configList.emitter.on 'close', =>
+			@atomConfigList.hide()
 
 	deactivate: ->
 		@disposable.dispose()
@@ -222,6 +228,13 @@ module.exports = Debug =
 		@atomCustomPanel.show()
 		if options then @customPanel.setOptions options
 		@customPanel.focus()
+
+	selectConfig: ->
+		@configList.setConfigs @debugConfigs.getConfigs()
+		@atomConfigList.show()
+		@configList.focusFilterEditor()
+		@configList.awaitSelection().then (selectedConfig) =>
+			@debug selectedConfig
 
 	continue: ->
 		unless @ui.isPaused then return
