@@ -24,6 +24,7 @@ Current available backends:
 ## Commands:
 
 `dbg:custom-debug` - Opens the debug configuration panel  
+`dbg:select-config` - Opens select list with debug configuration from .atom-debug files, starts debug session when a configuration is selected  
 `dbg:debug` - Begins a new debug session, continues a paused, or opens the config panel if no settings present  
 `dbg:continue` - Continue  
 `dbg:pause` - Pause  
@@ -34,6 +35,31 @@ Current available backends:
 `dbg:stop` - Stop debugging  
 `dbg:toggle-breakpoint` - Toggle a breakpoint on the currently active line  
 `dbg:clear-breakpoints` - Clear all breakpoints  
+
+## Advanced Debug Configurations
+
+If you need access to more options than are available in the configuration panel or you want to save different debug configurations for easy use, you can create custom configuration files in the root directory of your project.
+
+Supported Formats:
+ * JSON `.atom-debug.json`
+ * CSON `.atom-debug.cson`
+
+Example:
+
+This cson example creates debug configuration `client` and `sever` which can then be started with the `dbg:select-config` command. Refer to specific backend documentation for complete list of supported options.
+```
+client:
+	debugger: 'dbg-gdb'
+	cwd: 'client'
+	path: 'client/bin'
+	args: ['--connect', '1234']
+
+server:
+	debugger: 'dbg-gdb'
+	cwd: 'server'
+	path: 'server/bin'
+	args: ['--port', '1234']
+```
 
 ## Service: `dbg`
 
