@@ -29,14 +29,17 @@ class CustomDebugConfigs
 		@watcher.close
 
 	updateConfig: (f) ->
-		switch path.extname f
-			when '.json'
-				@debugConfigs[f] = JSON.parse fs.readFileSync f
-			when '.cson'
-				@debugConfigs[f] = CSON.parse fs.readFileSync f
+		try
+			@debugConfigs[f] = switch path.extname f
+				when '.json' then JSON.parse fs.readFileSync f
+				when '.cson' then CSON.parse fs.readFileSync f
+				else throw 'Unsupported file extension'
+		catch error
+			console.error "Error loading #{f}:\n", error
+			delete @debugConfigs[f]
 
 	getConfigs: ->
 		configs = {}
 		for f of @debugConfigs
-			Object.assign(configs, @debugConfigs[f])
+			Object.assign configs, @debugConfigs[f]
 		return configs
