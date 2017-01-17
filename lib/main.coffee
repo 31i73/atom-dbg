@@ -1,9 +1,10 @@
 Ui = require './Ui'
+ConfigManager = require './ConfigManager'
+
 Toolbar = require './view/Toolbar'
 Sidebar = require './view/Sidebar'
 CustomPanel = require './view/CustomPanel'
 ConfigList = require './view/ConfigList'
-CustomDebugConfigs = require './debugConfigurations'
 
 {CompositeDisposable, Emitter} = require 'atom'
 
@@ -20,7 +21,7 @@ module.exports = Debug =
 	buggers: []
 	activeBugger: null
 	breakpoints: []
-	debugConfigs: null
+	configManager: null
 
 	activate: (state) ->
 		@provider = new Emitter()
@@ -73,20 +74,28 @@ module.exports = Debug =
 			if @activeBugger
 				if @ui.isPaused then @continue()
 			else
-				options = @customPanel.getOptions()
-				if options.path
-					@debug options
+				if @configManager.getConfigOptions().length > 0
+					@selectConfig()
 				else
 					@customDebug()
+				# options = @customPanel.getOptions()
+				# if options.path
+				# 	@debug options
+				# else
+				# 	@customDebug()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:pause-continue': =>
 			if @activeBugger
 				if @ui.isPaused then @continue() else @pause()
 			else
-				options = @customPanel.getOptions()
-				if options.path
-					@debug options
+				if @configManager.getConfigOptions().length > 0
+					@selectConfig()
 				else
 					@customDebug()
+				# options = @customPanel.getOptions()
+				# if options.path
+				# 	@debug options
+				# else
+				# 	@customDebug()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-over': => @stepOver()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-in': => @stepIn()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-out': => @stepOut()
@@ -117,8 +126,8 @@ module.exports = Debug =
 			for breakpoint in state.breakpoints
 				@addBreakpoint breakpoint.path, breakpoint.line
 
-		@debugConfigs = new CustomDebugConfigs
-		@configList = new ConfigList
+		@configManager = new ConfigManager
+		@configList = new ConfigList this
 		@atomConfigList = atom.workspace.addModalPanel item: @configList, visible: false
 		@configList.emitter.on 'close', =>
 			@atomConfigList.hide()
@@ -229,12 +238,16 @@ module.exports = Debug =
 		if options then @customPanel.setOptions options
 		@customPanel.focus()
 
+	openConfigFile: ->
+		@configManager.openConfigFile()
+
+	saveOptions: (options) ->
+		@configManager.saveOptions options
+
 	selectConfig: ->
-		@configList.setConfigs @debugConfigs.getConfigs()
+		@configList.setConfigs @configManager.getConfigOptions()
 		@atomConfigList.show()
 		@configList.focusFilterEditor()
-		@configList.awaitSelection().then (selectedConfig) =>
-			@debug selectedConfig
 
 	continue: ->
 		unless @ui.isPaused then return

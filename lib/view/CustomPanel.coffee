@@ -119,6 +119,12 @@ class CustomPanel
 		startButton.addEventListener 'click', => @startDebugging()
 		div.appendChild startButton
 
+		saveButton = document.createElement 'button'
+		saveButton.classList.add 'btn', 'btn-primary', 'icon', 'icon-file-add'
+		saveButton.textContent = "Save"
+		saveButton.addEventListener 'click', => @saveOptions()
+		div.appendChild saveButton
+
 		@updateDebuggers()
 
 	pickFile: ->
@@ -207,6 +213,16 @@ class CustomPanel
 
 		@emitter.emit 'close'
 		@bugger.debug options
+
+	saveOptions: ->
+		options = @getOptions()
+
+		if !options.path
+			return
+
+		@emitter.emit 'close'
+		@bugger.saveOptions options
+		@bugger.selectConfig()
 
 	focus: ->
 		@pathInput.focus()

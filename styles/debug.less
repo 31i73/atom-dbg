@@ -274,8 +274,24 @@ atom-text-editor.editor {
 	.inline-block-start {
 		display: flex;
 		flex: none;
+		flex-direction: column;
 		padding: @component-padding / 2;
 	}
+		.inline-block-start > * {
+			margin: @component-padding / 2 0;
+			flex: 0 1 auto;
+			line-height: 2.3em;
+		}
+		.inline-block-start > *.btn-lg {
+			flex: 1 1 auto;
+			line-height: 2em;
+		}
+		.inline-block-start > *:first-child {
+			margin-top: 0;
+		}
+		.inline-block-start > *:last-child {
+			margin-bottom: 0;
+		}
 	.input-block-item {
 		display: flex;
 		flex: 1;
