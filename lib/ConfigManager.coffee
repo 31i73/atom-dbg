@@ -109,7 +109,7 @@ class ConfigManager
 					data += '\n'
 
 				when '.cson'
-					stringify = (data) ->
+					stringifyIdentifier = (data) ->
 						value = CSON.stringify data
 						value = value.replace /^"([a-z0-9]+)"$/, '$1'
 						return value
@@ -117,12 +117,12 @@ class ConfigManager
 					data = data.replace /([^\r\n])\s*$/, '$1'
 
 					data += '\n'
-					data += '\n' + (stringify name) + ':'
+					data += '\n' + (stringifyIdentifier name) + ':'
 					for name of options
 						if !options[name] || options[name] instanceof Array && options[name].length < 1
 							continue
 
-						data += '\n\t' + (stringify name) + ': ' + (stringify options[name])
+						data += '\n\t' + (stringifyIdentifier name) + ': ' + (CSON.stringify options[name])
 
 					data += '\n'
 
