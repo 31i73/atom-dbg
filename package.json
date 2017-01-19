@@ -28,7 +28,7 @@
   "consumedServices": {
     "dbgProvider": {
       "versions": {
-        "^1.0.0": "consumeDbgProvider"
+        "^1.1.0": "consumeDbgProvider"
       }
     }
   }

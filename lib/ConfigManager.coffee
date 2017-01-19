@@ -32,7 +32,8 @@ class ConfigManager
 		@watcher.close()
 
 	readFile: (f) ->
-		try @debugConfigs[f] = switch path.extname f
+		configs = {}
+		try configs = switch path.extname f
 			when '.json' then JSON.parse fs.readFileSync f
 			when '.cson' then CSON.parse fs.readFileSync f
 			else throw 'Unsupported file extension'
@@ -40,6 +41,11 @@ class ConfigManager
 		catch error
 			console.error "Error loading #{f}:\n", error
 			delete @debugConfigs[f]
+
+		basedir = path.dirname f
+		configs[filename].basedir = basedir for filename of configs
+
+		@debugConfigs[f] = configs
 
 	getConfigOptions: ->
 		configs = []
@@ -55,7 +61,12 @@ class ConfigManager
 		atom.workspace.open filename
 
 	getDefaultConfigPath: ->
-		filename = (Object.keys @debugConfigs )[0]
+		# find the first config file within projectPaths[0] (only the first is used, as this is what debug paths are relative to by default)
+		filename = null
+		for configFilename of @debugConfigs
+			if (path.dirname configFilename) == @projectPaths[0]
+				filename = configFilename
+
 		if !filename
 			if !@projectPaths.length then return null
 			filename = path.resolve @projectPaths[0], '.atom-dbg.cson'
@@ -75,7 +86,7 @@ class ConfigManager
 		filename = @getDefaultConfigPath()
 		if !filename then return
 
-		name = @getUniqueConfigName path.basename options.path
+		name = if (options.path.charAt 0)!='/' then options.path else @getUniqueConfigName path.basename options.path
 
 		if !@debugConfigs[filename]
 			@debugConfigs[filename] = {}

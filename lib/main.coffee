@@ -63,9 +63,19 @@ module.exports = Debug =
 		@disposable.add atom.commands.add '.tree-view .file', 'dbg:custom-debug': =>
 			selectedFile = document.querySelector '.tree-view .file.selected [data-path]'
 			if selectedFile!=null
+				path = require 'path'
+				paths = atom.project.getPaths()
+				relativePath = if paths.length > 0
+					path.relative paths[0], selectedFile.dataset.path
+				else
+					selectedFile.dataset.path
+
+				dir = path.dirname relativePath
+				if dir == '.' then dir = ''
+
 				@customDebug
-					path: selectedFile.dataset.path
-					cwd: (require 'path').dirname(selectedFile.dataset.path)
+					path: relativePath
+					cwd: dir
 					args: []
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:stop': => @stop()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:continue': => @continue()
@@ -196,6 +206,10 @@ module.exports = Debug =
 				@customDebug()
 				resolve true
 				return
+
+			if !options.basedir
+				paths = atom.project.getPaths()
+				options.basedir = paths[0] if paths.length>0
 
 			if options['debugger']
 				for bugger in @buggers
@@ -346,6 +360,7 @@ module.exports = Debug =
 		@activeBugger = bugger
 		@show()
 		breakpointsCopy = ( {path:breakpoint.path, line:breakpoint.line} for breakpoint in @breakpoints )
+
 		bugger.debug options,
 			breakpoints: breakpointsCopy
 			ui: @ui
