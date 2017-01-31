@@ -125,10 +125,12 @@ class ConfigManager
 						value = value.replace /^"([a-z0-9]+)"$/, '$1'
 						return value
 
-					data = data.replace /([^\r\n])\s*$/, '$1'
+					data = data.replace /\s*$/, ''
 
-					data += '\n'
-					data += '\n' + (stringifyIdentifier name) + ':'
+					if data.length > 0
+						data += '\n\n'
+
+					data += (stringifyIdentifier name) + ':'
 					for name of options
 						if !options[name] || options[name] instanceof Array && options[name].length < 1
 							continue
