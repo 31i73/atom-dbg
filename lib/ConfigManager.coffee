@@ -86,7 +86,7 @@ class ConfigManager
 		filename = @getDefaultConfigPath()
 		if !filename then return
 
-		name = if (options.path.charAt 0)!='/' then options.path else @getUniqueConfigName path.basename options.path
+		name = @getUniqueConfigName if (options.path.charAt 0)!='/' then options.path else path.basename options.path
 
 		if !@debugConfigs[filename]
 			@debugConfigs[filename] = {}
