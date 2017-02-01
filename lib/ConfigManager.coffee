@@ -73,7 +73,7 @@ class ConfigManager
 		return filename
 
 	getUniqueConfigName: (suggestion) ->
-		names = configOption.name for configOption in @getConfigOptions()
+		names = (configOption.name for configOption in @getConfigOptions())
 		name = suggestion
 		nameCount = 1
 
