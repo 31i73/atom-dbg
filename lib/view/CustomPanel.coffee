@@ -222,7 +222,12 @@ class CustomPanel
 
 		@emitter.emit 'close'
 		@bugger.saveOptions options
-		@bugger.selectConfig()
+
+		binding = atom.keymaps.findKeyBindings command: 'dbg:pause-continue'
+
+		atom.notifications.addSuccess 'Debug configuration saved',
+			description: if binding.length > 0 then 'Press `' + binding[0].keystrokes + '` to start a new debug session and select' else undefined
+			dismissable: true
 
 	focus: ->
 		@pathInput.focus()
