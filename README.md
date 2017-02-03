@@ -2,7 +2,7 @@
 
 An interactive debugger frontend
 
-![Debug screenshot](http://i.imgur.com/tsQESdU.png)
+![Debug screenshot](http://i.imgur.com/1Xuvll8.png)
 
 ![Debug screenshot](http://i.imgur.com/BdBA0yR.png)
 
@@ -23,30 +23,32 @@ Current available backends:
 
 ## Commands:
 
-`dbg:custom-debug` - Opens the debug configuration panel  
-`dbg:select-config` - Opens select list with debug configuration from .atom-debug files, starts debug session when a configuration is selected  
-`dbg:debug` - Begins a new debug session, continues a paused, or opens the config panel if no settings present  
-`dbg:continue` - Continue  
+`dbg:debug` - Begins a new debug session, or continues an existing  
+`dbg:continue` - Continues a paused, active debug session  
 `dbg:pause` - Pause  
-`dbg:pause-continue` - Toggle pause/continue  
+`dbg:pause-continue` - Toggle pause/continue (or begin anew if none active)  
 `dbg:step-over` - Step over the current line of code  
 `dbg:step-in` - Step into the current procedure  
 `dbg:step-out` - Complete and step out of the current procedure  
 `dbg:stop` - Stop debugging  
 `dbg:toggle-breakpoint` - Toggle a breakpoint on the currently active line  
-`dbg:clear-breakpoints` - Clear all breakpoints  
+`dbg:clear-breakpoints` - Clear all breakpoints
 
-## Advanced Debug Configurations
+`dbg:custom-debug` - Opens the debug configuration panel  
+`dbg:select-config` - Opens the select list for choosing a saved debug configuration (.atom-dbg files)  
 
-If you need access to more options than are available in the configuration panel or you want to save different debug configurations for easy use, you can create custom configuration files in the root directory of your project.
+## Debug Configuration Files:
 
-Supported Formats:
- * JSON `.atom-debug.json`
- * CSON `.atom-debug.cson`
+If you need access to more options than are available in the config panel or you want to save different debug configs for easy use, you can click the save button from the debug config panel or create/amend a config file in the root directory of your project directory.
 
-Example:
+**Supported files/formats:**  
+ `.atom-dbg.json` - Config file in JSON format  
+ `.atom-dbg.cson` - Config file in CSON format
 
-This cson example creates debug configuration `client` and `sever` which can then be started with the `dbg:select-config` command. Refer to specific backend documentation for complete list of supported options.
+### Example:
+
+This cson example creates debug configurations `client` and `server`, which can then be selected by starting a new debug session, or with the `dbg:select-config` command:
+
 ```
 client:
 	debugger: 'dbg-gdb'
@@ -60,6 +62,13 @@ server:
 	path: 'server/bin'
 	args: ['--port', '1234']
 ```
+
+#### Config Parameters:
+`debugger` - *Optional*. Specifies which debugger backend to use (If omitted a suitable backend will be selected automatically, based on the `path` target file)  
+`file` - The target file to debug
+
+Refer to the specific backend documentation for a list of all other supported parameter options
+
 
 ## Service: `dbg`
 
@@ -82,6 +91,7 @@ Example: `dbg.debug({ path: './myProg', args: ['testmode'] });`
 >> `path` - *Optional*. The path to the file to debug  
 >> `args` - *Optional*. An array of arguments to pass to the file being debugged  
 >> `cwd` - *Optional*. The working directory to use when debugging  
+>> `basedir` - *Optional*. The base dir for any relative paths  
 >> `...` - *Optional*. Custom debugger arguments  
 
 > If a `debugger` is not specified, every dbg provider will be queried with the options object provided;  
