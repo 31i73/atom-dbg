@@ -39,7 +39,10 @@ class ConfigManager
 			else throw 'Unsupported file extension'
 
 		catch error
-			console.error "Error loading #{f}:\n", error
+			atom.notifications.addError "Error loading debug file `#{f}`",
+				description: error.message
+				dismissable: true
+			console.error "Error loading debug file #{f}:\n", error
 			delete @debugConfigs[f]
 
 		basedir = path.dirname f
