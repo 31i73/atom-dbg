@@ -1,3 +1,11 @@
+## 1.4.0
+* Added: Debug configuration files. You can now save named debug configs, with custom options in project config files ([vanossj](https://github.com/vanossj))
+	*  Added: You can now save configs from the debug configuration panel
+* Changed: Pressing `F5` (dbg:pause-continue) to begin a new debug session now either prompts to select a debug config if configs are available, or shows the configuration panel
+* Fixed: Depreciated shadowdom removed. Now Atom 1.13+ only  ([vanossj](https://github.com/vanossj))
+* Changed: File paths are now relative, not absolute (in the case of debug config files, saved paths are relative to the location of this file)
+* Improved: Debug configuration panel debugger dropdown now shows "descriptive" names, rather than debug identifiers
+
 ## 1.3.0
 * Added: Inline hint system which automatically tracks changed variables when stepping through a program and marks these events within the source
 * Added: Atom now auto-focuses when a running program is interrupted and the debugger is activated
