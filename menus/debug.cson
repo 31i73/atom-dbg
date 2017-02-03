@@ -1,34 +1,35 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
-  '.tree-view .file': [
-    {
-      label: 'Debug',
-      command: 'dbg:custom-debug'
-    }
-    { type: 'separator' }
-  ]
-  'atom-text-editor': [
-    { type: 'separator' }
-    { label: 'Toggle breakpoint here', command: 'dbg:toggle-breakpoint' }
-    { type: 'separator' }
-  ]
+	'.tree-view .file': [
+		{
+			label: 'Debug this file',
+			command: 'dbg:custom-debug'
+		}
+		{ type: 'separator' }
+	]
+	'atom-text-editor': [
+		{ type: 'separator' }
+		{ label: 'Toggle breakpoint here', command: 'dbg:toggle-breakpoint' }
+		{ type: 'separator' }
+	]
 menu: [
-  {
-    label: 'Packages'
-    submenu: [
-      label: 'Debug'
-      submenu: [
-        { label: 'Configure...', command: 'dbg:custom-debug' }
-        { type: 'separator' }
-        { label: 'Start / Pause / Continue', command: 'dbg:pause-continue' }
-        { label: 'Step Over', command: 'dbg:step-over' }
-        { label: 'Step in', command: 'dbg:step-in' }
-        { label: 'Step Out', command: 'dbg:step-out' }
-        { label: 'Stop debugging', command: 'dbg:stop' }
-        { type: 'separator' }
-        { label: 'Toggle breakpoint on current line', command: 'dbg:toggle-breakpoint' }
-        { label: 'Clear all breakpoints', command: 'dbg:clear-breakpoints' }
-      ]
-    ]
-  }
+	{
+		label: 'Packages'
+		submenu: [
+			label: 'Debug'
+			submenu: [
+				{ label: 'Configure custom debug session...', command: 'dbg:custom-debug' }
+				{ label: 'Select debug configuration...', command: 'dbg:select-config' }
+				{ type: 'separator' }
+				{ label: 'Start / Pause / Continue', command: 'dbg:pause-continue' }
+				{ label: 'Step Over', command: 'dbg:step-over' }
+				{ label: 'Step in', command: 'dbg:step-in' }
+				{ label: 'Step Out', command: 'dbg:step-out' }
+				{ label: 'Stop debugging', command: 'dbg:stop' }
+				{ type: 'separator' }
+				{ label: 'Toggle breakpoint on current line', command: 'dbg:toggle-breakpoint' }
+				{ label: 'Clear all breakpoints', command: 'dbg:clear-breakpoints' }
+			]
+		]
+	}
 ]
