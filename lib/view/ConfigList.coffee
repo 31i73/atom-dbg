@@ -1,22 +1,31 @@
-{SelectListView, $$} = require 'atom-space-pen-views'
+{SelectListView} = require 'atom-select-list'
 {Emitter} = require 'atom'
 
 module.exports =
-class ConfigList extends SelectListView
-	initialize: (bugger) ->
-		super
+class ConfigList
+	constructor: (bugger) ->
 		@emitter = new Emitter
 		@bugger = bugger
+		@selectListView = new SelectListView
+			filterKeyForItems: (item) => item.name
+			elementForItem: (item) =>
+				element = document.createElement 'li'
+				if item.description
+					element.classList.add 'two-lines'
+					div = document.createElement 'div'
+					div.classList.add 'primary-line'
+					div.textContent = item.name
+					element.appendChild div
+					div = document.createElement 'div'
+					div.classList.add 'secondary-line'
+					div.textContent = item.description
+					element.appendChild div
+				else
+					element.textContent = item.name
+				return element
 
-	viewForItem: (item) ->
-		if item.description
-			$$ -> @li 'class':'two-lines', =>
-				@div 'class':'primary-line', item.name
-				@div 'class':'secondary-line', item.description
-		else
-			$$ -> @li item.name
-
-	getFilterKey: -> 'name'
+	destroy: ->
+		@selectListView.destroy()
 
 	setConfigs: (configs) ->
 		items = configs.slice()
