@@ -1,4 +1,4 @@
-{SelectListView} = require 'atom-select-list'
+SelectListView = require 'atom-select-list'
 {Emitter} = require 'atom'
 
 module.exports =
@@ -7,7 +7,8 @@ class ConfigList
 		@emitter = new Emitter
 		@bugger = bugger
 		@selectListView = new SelectListView
-			filterKeyForItems: (item) => item.name
+			items: []
+			filterKeyForItems: (item) => item.nameb
 			elementForItem: (item) =>
 				element = document.createElement 'li'
 				if item.description
@@ -23,6 +24,14 @@ class ConfigList
 				else
 					element.textContent = item.name
 				return element
+			didConfirmSelection: (item) =>
+				@emitter.emit 'close'
+				if item.config
+					@bugger.debug item.config
+				else if item.callback
+					item.callback()
+			didCancelSelection: =>
+				@emitter.emit 'close'
 
 	destroy: ->
 		@selectListView.destroy()
@@ -33,15 +42,4 @@ class ConfigList
 		items.push name:'Custom', description:'Configure a custom debug session', callback: => @bugger.customDebug()
 		items.push name:'Edit', description:'Edit your project debug settings', callback: => @bugger.openConfigFile()
 
-		@setItems items
-
-	cancel: ->
-		@emitter.emit 'close'
-
-	confirmed: (item) ->
-		@emitter.emit 'close'
-
-		if item.config
-			@bugger.debug item.config
-		else if item.callback
-			item.callback()
+		@selectListView.update items: items
