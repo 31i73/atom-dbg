@@ -1,10 +1,8 @@
 SelectListView = require 'atom-select-list'
-{Emitter} = require 'atom'
 
 module.exports =
 class ConfigList
 	constructor: (bugger) ->
-		@emitter = new Emitter
 		@bugger = bugger
 		@selectListView = new SelectListView
 			items: []
@@ -25,16 +23,17 @@ class ConfigList
 					element.textContent = item.name
 				return element
 			didConfirmSelection: (item) =>
-				@emitter.emit 'close'
+				@hide()
 				if item.config
 					@bugger.debug item.config
 				else if item.callback
 					item.callback()
-			didCancelSelection: =>
-				@emitter.emit 'close'
+			didCancelSelection: => @hide()
+		@modelPanel = atom.workspace.addModalPanel item: @selectListView, visible: false
 
 	destroy: ->
 		@selectListView.destroy()
+		@modelPanel.destroy()
 
 	setConfigs: (configs) ->
 		items = configs.slice()
@@ -43,3 +42,9 @@ class ConfigList
 		items.push name:'Edit', description:'Edit your project debug settings', callback: => @bugger.openConfigFile()
 
 		@selectListView.update items: items
+
+	hide: -> @modelPanel.hide()
+
+	show: ->
+		@modelPanel.show()
+		@selectListView.focus()

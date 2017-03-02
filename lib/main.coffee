@@ -138,9 +138,6 @@ module.exports = Debug =
 
 		@configManager = new ConfigManager
 		@configList = new ConfigList this
-		@atomConfigList = atom.workspace.addModalPanel item: @configList.selectListView, visible: false
-		@configList.emitter.on 'close', =>
-			@atomConfigList.hide()
 
 	deactivate: ->
 		@disposable.dispose()
@@ -260,8 +257,7 @@ module.exports = Debug =
 
 	selectConfig: ->
 		@configList.setConfigs @configManager.getConfigOptions()
-		@atomConfigList.show()
-		@configList.selectListView.focus()
+		@configList.show()
 
 	continue: ->
 		unless @ui.isPaused then return
