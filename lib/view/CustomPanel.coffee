@@ -202,6 +202,7 @@ class CustomPanel
 		for bugger in @bugger.buggers
 			option = document.createElement 'option'
 			option.textContent = bugger.description or bugger.name
+			option.value = bugger.name
 			option.selected = selected==option.value
 			@debuggerList.appendChild option
 

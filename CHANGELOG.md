@@ -5,6 +5,8 @@
 * Fixed: Depreciated shadowdom removed. Now Atom 1.13+ only  ([vanossj](https://github.com/vanossj))
 * Changed: File paths are now relative, not absolute (in the case of debug config files, saved paths are relative to the location of this file)
 * Improved: Debug configuration panel debugger dropdown now shows "descriptive" names, rather than debug identifiers
+* #### 1.4.1
+	* Fixed: Debugger selector on the custom panel did not function, and when saved would store incorrect debugger names
 
 ## 1.3.0
 * Added: Inline hint system which automatically tracks changed variables when stepping through a program and marks these events within the source
