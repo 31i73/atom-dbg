@@ -182,7 +182,9 @@ atom-text-editor.editor {
 
 	code {
 		font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
-		font-size: max(@font-size, 12px);
+		& when (isunit(@font-size, pt)), (isunit(@font-size, px)) {
+			font-size: max(@font-size, 12px);
+		}
 		color: contrast(@inset-panel-background-color, @syntax-text-color);
 		background: transparent;
 		.identifier {
