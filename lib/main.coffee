@@ -111,7 +111,7 @@ module.exports = Debug =
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:step-out': => @stepOut()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-breakpoint': =>
 			textEditor = atom.workspace.getActiveTextEditor()
-			if textEditor!=null
+			if textEditor!=undefined
 				pos = textEditor.getCursorBufferPosition()
 				@toggleBreakpoint textEditor.getPath(), pos.row+1
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:clear-breakpoints': =>
