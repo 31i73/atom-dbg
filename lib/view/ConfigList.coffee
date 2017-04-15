@@ -1,22 +1,39 @@
-{SelectListView, $$} = require 'atom-space-pen-views'
-{Emitter} = require 'atom'
+SelectListView = require 'atom-select-list'
 
 module.exports =
-class ConfigList extends SelectListView
-	initialize: (bugger) ->
-		super
-		@emitter = new Emitter
+class ConfigList
+	constructor: (bugger) ->
 		@bugger = bugger
+		@selectListView = new SelectListView
+			items: []
+			filterKeyForItems: (item) => item.nameb
+			elementForItem: (item) =>
+				element = document.createElement 'li'
+				if item.description
+					element.classList.add 'two-lines'
+					div = document.createElement 'div'
+					div.classList.add 'primary-line'
+					div.textContent = item.name
+					element.appendChild div
+					div = document.createElement 'div'
+					div.classList.add 'secondary-line'
+					div.textContent = item.description
+					element.appendChild div
+				else
+					element.textContent = item.name
+				return element
+			didConfirmSelection: (item) =>
+				@hide()
+				if item.config
+					@bugger.debug item.config
+				else if item.callback
+					item.callback()
+			didCancelSelection: => @hide()
+		@modelPanel = atom.workspace.addModalPanel item: @selectListView, visible: false
 
-	viewForItem: (item) ->
-		if item.description
-			$$ -> @li 'class':'two-lines', =>
-				@div 'class':'primary-line', item.name
-				@div 'class':'secondary-line', item.description
-		else
-			$$ -> @li item.name
-
-	getFilterKey: -> 'name'
+	destroy: ->
+		@selectListView.destroy()
+		@modelPanel.destroy()
 
 	setConfigs: (configs) ->
 		items = configs.slice()
@@ -24,15 +41,10 @@ class ConfigList extends SelectListView
 		items.push name:'Custom', description:'Configure a custom debug session', callback: => @bugger.customDebug()
 		items.push name:'Edit', description:'Edit your project debug settings', callback: => @bugger.openConfigFile()
 
-		@setItems items
+		@selectListView.update items: items
 
-	cancel: ->
-		@emitter.emit 'close'
+	hide: -> @modelPanel.hide()
 
-	confirmed: (item) ->
-		@emitter.emit 'close'
-
-		if item.config
-			@bugger.debug item.config
-		else if item.callback
-			item.callback()
+	show: ->
+		@modelPanel.show()
+		@selectListView.focus()
