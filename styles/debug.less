@@ -4,10 +4,6 @@
 // for a full listing of what's available.
 
 @import "ui-variables";
-@import "ui-variables";
-
-.debug {
-}
 
 atom-text-editor.editor {
 	.debug-breakpoint,
@@ -69,6 +65,7 @@ atom-text-editor.editor {
 
 .debug-toolbar {
 	padding: @component-padding / 2;
+	-webkit-user-select: none;
 
 	.btn-toolbar {
 		margin-left: 0;
@@ -93,6 +90,11 @@ atom-text-editor.editor {
 .debug-sidebar {
 	display: flex;
 	flex-direction: column;
+	-webkit-user-select: none;
+
+	.selectable {
+		-webkit-user-select: text;
+	}
 
 	&.with-toolbar {
 		background: rgba(0,0,0,0.2);

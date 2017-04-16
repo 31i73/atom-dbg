@@ -20,7 +20,6 @@ class VariableList
 		@element.classList.add 'debug-sidebar'
 		@element.classList.add 'with-toolbar' if showToolbar
 
-
 		options = document.createElement 'div'
 		options.classList.add 'options', 'btn-group', 'btn-toggle'
 
@@ -151,7 +150,7 @@ class VariableList
 					item.appendChild text
 
 				text = document.createElement if stringName then 'span' else 'em'
-				text.classList.add 'value'
+				text.classList.add 'value', 'selectable'
 				text.textContent = stringValue
 				item.appendChild text
 
