@@ -303,14 +303,16 @@ module.exports = Debug =
 	removeBreakpoint: (path, line) ->
 		if @breakpoints.length>0
 			editors = atom.workspace.getTextEditors()
-			for i in [0..@breakpoints.length-1]
+			i = 0
+			while i < @breakpoints.length
 				breakpoint = @breakpoints[i]
 				if breakpoint.path==path and breakpoint.line==line
 					@breakpoints.splice i,1
 					@activeBugger?.removeBreakpoint breakpoint
-					i--
 					for marker in breakpoint.markers
 						marker.destroy()
+				else
+					i++
 
 	clearBreakpoints: ->
 		oldBreakpoints = @breakpoints
