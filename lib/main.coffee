@@ -4,6 +4,7 @@ ConfigManager = require './ConfigManager'
 Toolbar = require './view/Toolbar'
 StackList = require './view/StackList'
 VariableList = require './view/VariableList'
+BreakpointList = require './view/BreakpointList'
 CustomPanel = require './view/CustomPanel'
 ConfigList = require './view/ConfigList'
 
@@ -16,6 +17,7 @@ module.exports = Debug =
 	atomToolbar: null
 	stackList: null
 	variableList: null
+	breakpointList: null
 	customPanel: null
 	atomCustomPanel: null
 	disposable: null
@@ -53,6 +55,7 @@ module.exports = Debug =
 
 		@stackList = new StackList this
 		@variableList = new VariableList this
+		@breakpointList = new BreakpointList this
 		@customPanel = new CustomPanel this
 
 		@atomCustomPanel = atom.workspace.addBottomPanel item: @customPanel.getElement(), visible: false, priority:200
@@ -244,6 +247,7 @@ module.exports = Debug =
 		@atomToolbar?.hide()
 		atom.workspace.hide @stackList
 		atom.workspace.hide @variableList
+		atom.workspace.hide @breakpointList
 
 	customDebug: (options) ->
 		@atomCustomPanel.show()
@@ -300,6 +304,8 @@ module.exports = Debug =
 					'class': 'debug-breakpoint'
 				markers.push marker
 
+		@breakpointList.updateBreakpoints @breakpoints
+
 	removeBreakpoint: (path, line) ->
 		if @breakpoints.length>0
 			editors = atom.workspace.getTextEditors()
@@ -314,13 +320,18 @@ module.exports = Debug =
 				else
 					i++
 
+			@breakpointList.updateBreakpoints @breakpoints
+
 	clearBreakpoints: ->
 		oldBreakpoints = @breakpoints
 		@breakpoints = []
+
 		for breakpoint in oldBreakpoints
 			for marker in breakpoint.markers
 				marker.destroy()
 			@activeBugger?.removeBreakpoint breakpoint
+
+		@breakpointList.updateBreakpoints @breakpoints
 
 	hasBreakpoint: (path, line) ->
 		for breakpoint in @breakpoints
@@ -338,6 +349,7 @@ module.exports = Debug =
 					@activeBugger?.removeBreakpoint breakpoint
 					for marker in breakpoint.markers
 						marker.destroy()
+					@breakpointList.updateBreakpoints @breakpoints
 					return
 
 		@addBreakpoint path, line

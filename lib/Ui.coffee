@@ -239,6 +239,7 @@ class Ui
 		@bugger.toolbar.updateButtons()
 		atom.workspace.open @bugger.stackList, searchAllPanes:true, split:'up'
 		atom.workspace.open @bugger.variableList, searchAllPanes:true, split: 'down'
+		atom.workspace.open @bugger.breakpointList, searchAllPanes:true, split: 'down'
 
 	stop: ->
 		@isStepping = false

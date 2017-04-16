@@ -1,11 +1,15 @@
 # See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
 'context-menu':
 	'.tree-view .file': [
-		{
-			label: 'Debug this file',
-			command: 'dbg:custom-debug'
-		}
+		{ label: 'Debug this file', command: 'dbg:custom-debug' }
 		{ type: 'separator' }
+	]
+	'.debug-sidebar-breakpoints tr': [
+		{ label: 'Remove breakpoint', command: 'dbg:remove-breakpoint' }
+		{ label: 'Clear all breakpoints', command: 'dbg:clear-breakpoints' }
+	]
+	'.debug-sidebar-breakpoints': [
+		{ label: 'Clear all breakpoints', command: 'dbg:clear-breakpoints' }
 	]
 	'atom-text-editor': [
 		{ type: 'separator' }
