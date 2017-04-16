@@ -1,3 +1,8 @@
+## 1.5.0
+* Improved: Now uses Atom 1.17 docks. Sidebars can now be resized, split, dragged or tabbed anywhere within Atom, and by default are docked onto the side of the screen
+* Fixed: Incompatibilities with some themes/font-sizings ([#17 - cocoaway](https://github.com/31i73/atom-dbg/issues/17))
+* Fixed: Error when trying to toggle breakpoint if a texteditor is not focused ([#15 - rohmer](https://github.com/31i73/atom-dbg/issues/15))
+
 ## 1.4.0
 * Added: Debug configuration files. You can now save named debug configs, with custom options in project config files ([vanossj](https://github.com/vanossj))
 	*  Added: You can now save configs from the debug configuration panel
