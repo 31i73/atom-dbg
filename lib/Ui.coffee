@@ -53,7 +53,7 @@ class Ui
 
 	setStack: (stack) ->
 		@stack = stack
-		@bugger.sidebar.updateStackList @stack
+		@bugger.stackList.updateStack @stack
 
 		@clearEditorMarkers()
 		for editor in atom.workspace.getTextEditors()
@@ -93,13 +93,13 @@ class Ui
 				else
 					@setHint @currentPath, lastPosition.line, updateMessages.join '\n'
 
-		@bugger.sidebar.updateVariables @variables
+		@bugger.variableList.updateVariables @variables
 
 	setFrame: (index) ->
-		@bugger.sidebar.setFrame index
+		@bugger.stackList.setFrame index
 		frame = @stack[index]
 		if !frame.local
-			@bugger.sidebar.setShowSystemStack true
+			@bugger.stackList.setShowSystemStack true
 
 		if frame.file != @currentPath || frame.line != @currentLine
 			@lastPosition[@currentPath] =
@@ -230,7 +230,6 @@ class Ui
 		@setStack []
 		@setVariables []
 		@bugger.toolbar.updateButtons()
-		# @bugger.atomSidebar.hide()
 
 	paused: ->
 		currentWindow = (require 'electron').remote.getCurrentWindow()
@@ -238,7 +237,8 @@ class Ui
 
 		@isPaused = true
 		@bugger.toolbar.updateButtons()
-		@bugger.atomSidebar.show()
+		atom.workspace.open @bugger.stackList, searchAllPanes:true, split:'up'
+		atom.workspace.open @bugger.variableList, searchAllPanes:true, split: 'down'
 
 	stop: ->
 		@isStepping = false

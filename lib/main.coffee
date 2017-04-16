@@ -2,7 +2,8 @@ Ui = require './Ui'
 ConfigManager = require './ConfigManager'
 
 Toolbar = require './view/Toolbar'
-Sidebar = require './view/Sidebar'
+StackList = require './view/StackList'
+VariableList = require './view/VariableList'
 CustomPanel = require './view/CustomPanel'
 ConfigList = require './view/ConfigList'
 
@@ -13,8 +14,8 @@ module.exports = Debug =
 	ui: null
 	toolbar: null
 	atomToolbar: null
-	sidebar: null
-	atomSidebar: null
+	stackList: null
+	variableList: null
 	customPanel: null
 	atomCustomPanel: null
 	disposable: null
@@ -50,10 +51,10 @@ module.exports = Debug =
 		@toolbar = new Toolbar this
 		@atomToolbar = atom.workspace.addBottomPanel item: @toolbar.getElement(), visible: false, priority:200
 
-		@sidebar = new Sidebar this
-		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
-
+		@stackList = new StackList this
+		@variableList = new VariableList this
 		@customPanel = new CustomPanel this
+
 		@atomCustomPanel = atom.workspace.addBottomPanel item: @customPanel.getElement(), visible: false, priority:200
 		@customPanel.emitter.on 'close', =>
 			@atomCustomPanel.hide()
@@ -229,7 +230,6 @@ module.exports = Debug =
 
 			(Promise.all promises).then =>
 				if !resolved
-					console.log options
 					if options.path
 						@ui.showError 'Could not detect an installed debugger compatible with this file'
 					else
@@ -242,7 +242,8 @@ module.exports = Debug =
 
 	hide: ->
 		@atomToolbar?.hide()
-		@atomSidebar?.hide()
+		atom.workspace.hide @stackList
+		atom.workspace.hide @variableList
 
 	customDebug: (options) ->
 		@atomCustomPanel.show()
