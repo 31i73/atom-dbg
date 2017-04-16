@@ -4,7 +4,7 @@ An interactive debugger frontend
 
 ![Debug screenshot](http://i.imgur.com/1Xuvll8.png)
 
-![Debug screenshot](http://i.imgur.com/BdBA0yR.png)
+![Debug screenshot](http://i.imgur.com/wqtn5Pu.png)
 
 Supports:
 
