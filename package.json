@@ -1,7 +1,7 @@
 {
   "name": "dbg",
   "main": "./lib/main",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "An interactive debugger frontend",
   "keywords": [
     "debug",
