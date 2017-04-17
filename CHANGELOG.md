@@ -1,3 +1,9 @@
+## 1.6.0
+* Buttons for toggling stack/variable/breakpoint panels
+* Added: Breakpoint management panel
+* Fixed: Occasional malfunctions when removing breakpoints
+* Improved: Character case throughout menus
+
 ## 1.5.0
 * Improved: Now uses Atom 1.17 docks. Sidebars can now be resized, split, dragged or tabbed anywhere within Atom, and by default are docked onto the side of the screen
 * Fixed: Incompatibilities with some themes/font-sizings ([#17 - cocoaway](https://github.com/31i73/atom-dbg/issues/17))
