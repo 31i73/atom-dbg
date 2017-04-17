@@ -237,9 +237,6 @@ class Ui
 
 		@isPaused = true
 		@bugger.toolbar.updateButtons()
-		@bugger.stackList.show().then =>
-			@bugger.variableList.show().then =>
-					@bugger.breakpointList.show()
 
 	stop: ->
 		@isStepping = false

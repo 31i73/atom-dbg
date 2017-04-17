@@ -144,9 +144,9 @@ module.exports = Debug =
 		@configList = new ConfigList this
 
 	deactivate: ->
-		@stackList?.dispose()
-		@variableList?.dispose()
-		@breakpointList?.dispose()
+		@stackList.dispose()
+		@variableList.dispose()
+		@breakpointList.dispose()
 		@disposable.dispose()
 
 	serialize: ->
@@ -203,7 +203,6 @@ module.exports = Debug =
 			@breakpointHint?.destroy()
 			@breakpointHint = null
 
-
 	debug: (options) ->
 		return new Promise (resolve) =>
 			if !options
@@ -244,6 +243,8 @@ module.exports = Debug =
 
 	show: ->
 		@atomToolbar.show()
+		@stackList.show().then =>
+			@variableList.show()
 		@toolbar.updateButtons()
 
 	hide: ->
