@@ -124,6 +124,10 @@ module.exports = Debug =
 		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @atomCustomPanel.hide()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:select-config': => @selectConfig()
 
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-stack-list': => @stackList.toggle()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-variable-list': => @variableList.toggle()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-breakpoint-list': => @breakpointList.toggle()
+
 		# install any text editors which are or become sourcecode (give them a clickable gutter)
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
 			disposed = false

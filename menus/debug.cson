@@ -18,6 +18,17 @@
 	]
 menu: [
 	{
+		label: 'View'
+		submenu: [
+			label: 'Debug'
+			submenu: [
+				{ label: 'Toggle Call Stack', command: 'dbg:toggle-stack-list' }
+				{ label: 'Toggle Variable List', command: 'dbg:toggle-variable-list' }
+				{ label: 'Toggle Breakpoint List', command: 'dbg:toggle-breakpoint-list' }
+			]
+		]
+	}
+	{
 		label: 'Packages'
 		submenu: [
 			label: 'Debug'
