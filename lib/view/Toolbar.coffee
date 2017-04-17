@@ -74,6 +74,35 @@ class Toolbar
 		@bugger.ui.emitter.on 'setShowHints', (set) =>
 			@buttonHints.classList.toggle 'selected', set
 
+		optionGroup = document.createElement 'div'
+		optionGroup.classList.add 'btn-group'
+		optionGroup.classList.add 'options'
+		buttonToolbar.appendChild optionGroup
+
+		@buttonToggleStack = document.createElement 'button'
+		@buttonToggleStack.classList.add 'btn', 'icon', 'icon-steps'
+		@buttonToggleStack.addEventListener 'click', => @bugger.stackList.toggle()
+		@bugger.stackList.emitter.on 'shown', => @buttonToggleStack.classList.add 'selected'
+		@bugger.stackList.emitter.on 'hidden', => @buttonToggleStack.classList.remove 'selected'
+		@subscriptions.add atom.tooltips.add @buttonToggleStack, title: 'Show stack list'
+		optionGroup.appendChild @buttonToggleStack
+
+		@buttonToggleVariables = document.createElement 'button'
+		@buttonToggleVariables.classList.add 'btn', 'icon', 'icon-list-unordered'
+		@buttonToggleVariables.addEventListener 'click', => @bugger.variableList.toggle()
+		@bugger.variableList.emitter.on 'shown', => @buttonToggleVariables.classList.add 'selected'
+		@bugger.variableList.emitter.on 'hidden', => @buttonToggleVariables.classList.remove 'selected'
+		@subscriptions.add atom.tooltips.add @buttonToggleVariables, title: 'Show variables'
+		optionGroup.appendChild @buttonToggleVariables
+
+		@buttonToggleBreakpoints = document.createElement 'button'
+		@buttonToggleBreakpoints.classList.add 'btn', 'icon', 'icon-stop'
+		@buttonToggleBreakpoints.addEventListener 'click', => @bugger.breakpointList.toggle()
+		@bugger.breakpointList.emitter.on 'shown', => @buttonToggleBreakpoints.classList.add 'selected'
+		@bugger.breakpointList.emitter.on 'hidden', => @buttonToggleBreakpoints.classList.remove 'selected'
+		@subscriptions.add atom.tooltips.add @buttonToggleBreakpoints, title: 'Show breakpoints'
+		optionGroup.appendChild @buttonToggleBreakpoints
+
 		buttonGroup = document.createElement 'div'
 		buttonGroup.classList.add 'btn-group'
 		buttonToolbar.appendChild buttonGroup

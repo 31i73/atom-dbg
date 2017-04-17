@@ -1,15 +1,16 @@
-{Emitter, CompositeDisposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
+SidePane = require './SidePane'
 
 module.exports =
-class StackList
+class StackList extends SidePane
 	getTitle: -> 'Call Stack'
 	getDefaultLocation: -> 'right'
-	isPermanentDockItem: -> true
 
 	constructor: (bugger) ->
+		super
+
 		@subscriptions = new CompositeDisposable()
 
-		@emitter = new Emitter()
 		@bugger = bugger
 
 		@showSystemStack = false
@@ -73,12 +74,9 @@ class StackList
 		@stackListTBody = document.createElement 'tbody'
 		stackListTable.appendChild @stackListTBody
 
-	destroy: ->
+	dispose: ->
+		@destroy()
 		@subscriptions.dispose()
-		@element.remove()
-
-	getElement: ->
-		@element
 
 	setShowSystemStack: (visible) ->
 		@showSystemStack = visible

@@ -48,15 +48,15 @@ module.exports = Debug =
 		@provider.getBreakpoints = @getBreakpoints.bind this
 		@provider.hasBreakpoint = @hasBreakpoint.bind this
 
-		@ui = new Ui this
-
-		@toolbar = new Toolbar this
-		@atomToolbar = atom.workspace.addBottomPanel item: @toolbar.getElement(), visible: false, priority:200
-
 		@stackList = new StackList this
 		@variableList = new VariableList this
 		@breakpointList = new BreakpointList this
 		@customPanel = new CustomPanel this
+
+		@ui = new Ui this
+
+		@toolbar = new Toolbar this
+		@atomToolbar = atom.workspace.addBottomPanel item: @toolbar.getElement(), visible: false, priority:200
 
 		@atomCustomPanel = atom.workspace.addBottomPanel item: @customPanel.getElement(), visible: false, priority:200
 		@customPanel.emitter.on 'close', =>
@@ -144,6 +144,9 @@ module.exports = Debug =
 		@configList = new ConfigList this
 
 	deactivate: ->
+		@stackList?.dispose()
+		@variableList?.dispose()
+		@breakpointList?.dispose()
 		@disposable.dispose()
 
 	serialize: ->
@@ -245,9 +248,9 @@ module.exports = Debug =
 
 	hide: ->
 		@atomToolbar?.hide()
-		atom.workspace.hide @stackList
-		atom.workspace.hide @variableList
-		atom.workspace.hide @breakpointList
+		@stackList?.hide()
+		@variableList?.hide()
+		@breakpointList?.hide()
 
 	customDebug: (options) ->
 		@atomCustomPanel.show()

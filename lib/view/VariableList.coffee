@@ -1,15 +1,16 @@
-{Emitter, CompositeDisposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
+SidePane = require './SidePane'
 
 module.exports =
-class VariableList
+class VariableList extends SidePane
 	getTitle: -> 'Variables'
 	getDefaultLocation: -> 'right'
-	isPermanentDockItem: -> true
 
 	constructor: (bugger) ->
+		super
+
 		@subscriptions = new CompositeDisposable()
 
-		@emitter = new Emitter()
 		@bugger = bugger
 
 		@showVariableTypes = false
@@ -61,12 +62,11 @@ class VariableList
 
 		@expandedVariables = {}
 
-	destroy: ->
-		@subscriptions.dispose()
-		@element.remove()
+		@isVisible = false
 
-	getElement: ->
-		@element
+	dispose: ->
+		@destroy()
+		@subscriptions.dispose()
 
 	setShowVariableTypes: (visible) ->
 		@showVariableTypes = visible

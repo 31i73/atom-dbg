@@ -1,15 +1,16 @@
-{Emitter, CompositeDisposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
+SidePane = require './SidePane'
 
 module.exports =
-class BreakpointList
+class BreakpointList extends SidePane
 	getTitle: -> 'Breakpoints'
 	getDefaultLocation: -> 'right'
-	isPermanentDockItem: -> true
 
 	constructor: (bugger) ->
+		super
+
 		@subscriptions = new CompositeDisposable()
 
-		@emitter = new Emitter()
 		@bugger = bugger
 
 		@showSystemStack = false
@@ -60,12 +61,9 @@ class BreakpointList
 		@tableBody = document.createElement 'tbody'
 		@table.appendChild @tableBody
 
-	destroy: ->
+	dispose: ->
+		@destroy()
 		@subscriptions.dispose()
-		@element.remove()
-
-	getElement: ->
-		@element
 
 	updateBreakpoints: (breakpoints) ->
 		while @tableBody.firstChild

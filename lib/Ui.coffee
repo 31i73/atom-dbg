@@ -237,9 +237,9 @@ class Ui
 
 		@isPaused = true
 		@bugger.toolbar.updateButtons()
-		atom.workspace.open @bugger.stackList, searchAllPanes:true, split:'up'
-		atom.workspace.open @bugger.variableList, searchAllPanes:true, split: 'down'
-		atom.workspace.open @bugger.breakpointList, searchAllPanes:true, split: 'down'
+		@bugger.stackList.show().then =>
+			@bugger.variableList.show().then =>
+					@bugger.breakpointList.show()
 
 	stop: ->
 		@isStepping = false
