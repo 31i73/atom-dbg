@@ -190,13 +190,14 @@ class CustomPanel
 	updateDebuggers: ->
 		selected = null
 		while @debuggerList.firstChild
-			if @debuggerList.firstChild.selected
+			if selected==null and @debuggerList.firstChild.selected
 				selected = @debuggerList.firstChild.value
 			@debuggerList.removeChild @debuggerList.firstChild
 
 		option = document.createElement 'option'
 		option.textContent = 'automatic'
 		option.value = ''
+		option.selected = selected==option.value or selected==null
 		@debuggerList.appendChild option
 
 		for bugger in @bugger.buggers
