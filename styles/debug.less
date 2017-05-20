@@ -4,10 +4,6 @@
 // for a full listing of what's available.
 
 @import "ui-variables";
-@import "ui-variables";
-
-.debug {
-}
 
 atom-text-editor.editor {
 	.debug-breakpoint,
@@ -69,40 +65,84 @@ atom-text-editor.editor {
 
 .debug-toolbar {
 	padding: @component-padding / 2;
+	-webkit-user-select: none;
 
 	.btn-toolbar {
 		margin-left: 0;
 		margin-right: 0;
-	}
 
-	.btn .icon {
-		display: inline-block;
-		width: 17px;
-		height: 19px;
-		fill: currentColor;
-		vertical-align: middle;
-		margin-top: -2px;
-	}
+		.btn .icon {
+			display: inline-block;
+			width: 17px;
+			height: 19px;
+			fill: currentColor;
+			vertical-align: middle;
+			margin-top: -2px;
+		}
 
-	.options {
-		float: right;
-		margin-right: 0;
+		.options {
+			float: right;
+			margin-right: 0;
+		}
 	}
 }
 
 .debug-sidebar {
 	display: flex;
-	overflow: auto;
 	flex-direction: column;
-	width: 350px;
+	-webkit-user-select: none;
+
+	.selectable {
+		-webkit-user-select: text;
+	}
+
+	&.with-toolbar {
+		background: rgba(0,0,0,0.2);
+
+		> .body {
+			padding-top: @component-padding;
+		}
+	}
+
+	> .body {
+		flex: 1 1;
+		overflow: auto;
+		padding-left: @component-padding;
+		padding-right: @component-padding;
+
+		> ul {
+			width: min-content;
+		}
+	}
+
+	> .options {
+		flex: 0 0 auto;
+		margin: @component-padding;
+	}
+
+	.toolbar {
+		display: flex;
+		flex: 0 0 auto;
+
+		background: @app-background-color;
+		padding: @component-padding;
+		border-bottom: 1px solid @base-border-color;
+
+		> .spacer {
+			flex: 1 1;
+		}
+
+		> .btn-group {
+			display: block;
+			margin-right: @component-padding;
+
+			> .btn {
+				height: 100%;
+			}
+		}
+	}
 
 	.inset-panel {
-		display: flex;
-		flex-direction: column;
-		position: relative;
-		flex: 1 0;
-		min-height: 75px;
-		overflow: hidden;
 
 		&.variables {
 			flex: 2 0;
@@ -113,7 +153,6 @@ atom-text-editor.editor {
 		}
 
 		.panel-heading {
-			flex: 0 1 auto;
 			cursor: default;
 			.btn {
 				top: 0;
@@ -126,16 +165,12 @@ atom-text-editor.editor {
 
 		.panel-body {
 			overflow: auto;
-			flex: 1 0 0;
 			position: relative;
 		}
 	}
 	.list-item {
 		overflow: hidden;
 		text-overflow: ellipsis;
-	}
-	.btn.btn-sm {
-		line-height: 1em;
 	}
 
 	.variable-list {
@@ -161,7 +196,7 @@ atom-text-editor.editor {
 
 		tr.selected > td::before {
 			content: '';
-			background-color: @background-color-selected;
+			background-color: @background-color-highlight;
 			position: absolute;
 			left: 0;
 			right: 0;
@@ -194,12 +229,6 @@ atom-text-editor.editor {
 			// color: @syntax-color-constant;
 			color: @text-color-info;
 		}
-	}
-}
-
-@media (max-width: 1000px) {
-	.debug-sidebar {
-		width: 250px;
 	}
 }
 

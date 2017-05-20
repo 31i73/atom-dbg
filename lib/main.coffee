@@ -2,7 +2,9 @@ Ui = require './Ui'
 ConfigManager = require './ConfigManager'
 
 Toolbar = require './view/Toolbar'
-Sidebar = require './view/Sidebar'
+StackList = require './view/StackList'
+VariableList = require './view/VariableList'
+BreakpointList = require './view/BreakpointList'
 CustomPanel = require './view/CustomPanel'
 ConfigList = require './view/ConfigList'
 
@@ -13,8 +15,9 @@ module.exports = Debug =
 	ui: null
 	toolbar: null
 	atomToolbar: null
-	sidebar: null
-	atomSidebar: null
+	stackList: null
+	variableList: null
+	breakpointList: null
 	customPanel: null
 	atomCustomPanel: null
 	disposable: null
@@ -45,15 +48,16 @@ module.exports = Debug =
 		@provider.getBreakpoints = @getBreakpoints.bind this
 		@provider.hasBreakpoint = @hasBreakpoint.bind this
 
+		@stackList = new StackList this
+		@variableList = new VariableList this
+		@breakpointList = new BreakpointList this
+		@customPanel = new CustomPanel this
+
 		@ui = new Ui this
 
 		@toolbar = new Toolbar this
 		@atomToolbar = atom.workspace.addBottomPanel item: @toolbar.getElement(), visible: false, priority:200
 
-		@sidebar = new Sidebar this
-		@atomSidebar = atom.workspace.addRightPanel item: @sidebar.getElement(), visible: false, priority:200
-
-		@customPanel = new CustomPanel this
 		@atomCustomPanel = atom.workspace.addBottomPanel item: @customPanel.getElement(), visible: false, priority:200
 		@customPanel.emitter.on 'close', =>
 			@atomCustomPanel.hide()
@@ -120,6 +124,10 @@ module.exports = Debug =
 		@disposable.add atom.commands.add 'atom-workspace', 'core:cancel': => @atomCustomPanel.hide()
 		@disposable.add atom.commands.add 'atom-workspace', 'dbg:select-config': => @selectConfig()
 
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-stack-list': => @stackList.toggle()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-variable-list': => @variableList.toggle()
+		@disposable.add atom.commands.add 'atom-workspace', 'dbg:toggle-breakpoint-list': => @breakpointList.toggle()
+
 		# install any text editors which are or become sourcecode (give them a clickable gutter)
 		@disposable.add atom.workspace.observeTextEditors (textEditor) =>
 			disposed = false
@@ -140,6 +148,9 @@ module.exports = Debug =
 		@configList = new ConfigList this
 
 	deactivate: ->
+		@stackList.dispose()
+		@variableList.dispose()
+		@breakpointList.dispose()
 		@disposable.dispose()
 
 	serialize: ->
@@ -196,7 +207,6 @@ module.exports = Debug =
 			@breakpointHint?.destroy()
 			@breakpointHint = null
 
-
 	debug: (options) ->
 		return new Promise (resolve) =>
 			if !options
@@ -229,7 +239,6 @@ module.exports = Debug =
 
 			(Promise.all promises).then =>
 				if !resolved
-					console.log options
 					if options.path
 						@ui.showError 'Could not detect an installed debugger compatible with this file'
 					else
@@ -238,11 +247,15 @@ module.exports = Debug =
 
 	show: ->
 		@atomToolbar.show()
+		@stackList.show().then =>
+			@variableList.show()
 		@toolbar.updateButtons()
 
 	hide: ->
 		@atomToolbar?.hide()
-		@atomSidebar?.hide()
+		@stackList?.hide()
+		@variableList?.hide()
+		@breakpointList?.hide()
 
 	customDebug: (options) ->
 		@atomCustomPanel.show()
@@ -299,25 +312,34 @@ module.exports = Debug =
 					'class': 'debug-breakpoint'
 				markers.push marker
 
+		@breakpointList.updateBreakpoints @breakpoints
+
 	removeBreakpoint: (path, line) ->
 		if @breakpoints.length>0
 			editors = atom.workspace.getTextEditors()
-			for i in [0..@breakpoints.length-1]
+			i = 0
+			while i < @breakpoints.length
 				breakpoint = @breakpoints[i]
 				if breakpoint.path==path and breakpoint.line==line
 					@breakpoints.splice i,1
 					@activeBugger?.removeBreakpoint breakpoint
-					i--
 					for marker in breakpoint.markers
 						marker.destroy()
+				else
+					i++
+
+			@breakpointList.updateBreakpoints @breakpoints
 
 	clearBreakpoints: ->
 		oldBreakpoints = @breakpoints
 		@breakpoints = []
+
 		for breakpoint in oldBreakpoints
 			for marker in breakpoint.markers
 				marker.destroy()
 			@activeBugger?.removeBreakpoint breakpoint
+
+		@breakpointList.updateBreakpoints @breakpoints
 
 	hasBreakpoint: (path, line) ->
 		for breakpoint in @breakpoints
@@ -335,6 +357,7 @@ module.exports = Debug =
 					@activeBugger?.removeBreakpoint breakpoint
 					for marker in breakpoint.markers
 						marker.destroy()
+					@breakpointList.updateBreakpoints @breakpoints
 					return
 
 		@addBreakpoint path, line
