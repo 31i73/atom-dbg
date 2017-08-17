@@ -144,7 +144,7 @@ class CustomPanel
 		{dialog} = require('electron').remote
 		file = dialog.showOpenDialog parentWindow, openOptions
 		if file?
-			@pathInput.model.buffer.setText file[0]
+			@pathInput.getModel().buffer.setText file[0]
 
 	pickCwd: ->
 		openOptions =
@@ -163,7 +163,7 @@ class CustomPanel
 		{dialog} = require('electron').remote
 		folder = dialog.showOpenDialog parentWindow, openOptions
 		if folder?
-			@cwdInput.model.buffer.setText folder[0]
+			@cwdInput.getModel().buffer.setText folder[0]
 
 	setOptions: (options) ->
 		if options.debugger
@@ -173,19 +173,19 @@ class CustomPanel
 					break
 
 		if options.path
-			@pathInput.model.setText options.path
+			@pathInput.getModel().setText options.path
 
 		if options.cwd
-			@cwdInput.model.setText options.cwd
+			@cwdInput.getModel().setText options.cwd
 
 		if options.args
-			@argsInput.model.setText options.args.join ' '
+			@argsInput.getModel().setText options.args.join ' '
 
 	getOptions: ->
 		debugger : @debuggerList.value or null,
-		path: @pathInput.model.getText() or null,
-		args : if args = @argsInput.model.getText() then [args] else [], # TODO: parse into args?
-		cwd : @cwdInput.model.getText() or null
+		path: @pathInput.getModel().getText() or null,
+		args : if args = @argsInput.getModel().getText() then [args] else [], # TODO: parse into args?
+		cwd : @cwdInput.getModel().getText() or null
 
 	updateDebuggers: ->
 		selected = null
