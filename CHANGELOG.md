@@ -3,6 +3,10 @@
 * Added: Breakpoint management panel
 * Fixed: Occasional malfunctions when removing breakpoints
 * Improved: Character case throughout menus
+* #### 1.6.1
+	* Fixed: Corner case where the active debugger selection was not maintained in the debug panel ([vanossj](https://github.com/vanossj))
+* #### 1.6.2
+	* Fixed: Internal errors using the debug panel ([chuck-r](https://github.com/chuck-r))
 
 ## 1.5.0
 * Improved: Now uses Atom 1.17 docks. Sidebars can now be resized, split, dragged or tabbed anywhere within Atom, and by default are docked onto the side of the screen
