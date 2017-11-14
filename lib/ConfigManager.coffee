@@ -27,6 +27,10 @@ class ConfigManager
 		@watcher.on 'add', (f) => @readFile f
 		@watcher.on 'change', (f) => @readFile f
 		@watcher.on 'unlink', (f) => delete @debugConfigs[f]
+		@watcher.on 'error', (error) =>
+			atom.notifications.addError 'Unable to monitor dbg config files',
+				description: "A system error occurred trying to monitor dbg config files for updates (#{error?.code||'UNKNOWN'}).  \ndbg configurations will not automatically update if the files are modified."
+				dismissable: true
 
 	destructor: ->
 		@watcher.close()
