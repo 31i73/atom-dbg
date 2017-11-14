@@ -6,7 +6,7 @@ class ConfigList
 		@bugger = bugger
 		@selectListView = new SelectListView
 			items: []
-			filterKeyForItems: (item) => item.nameb
+			filterKeyForItem: (item) => item.name
 			elementForItem: (item) =>
 				element = document.createElement 'li'
 				if item.description
@@ -47,4 +47,5 @@ class ConfigList
 
 	show: ->
 		@modelPanel.show()
+		@selectListView.reset()
 		@selectListView.focus()
