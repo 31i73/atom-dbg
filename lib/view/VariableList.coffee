@@ -1,6 +1,12 @@
 {CompositeDisposable} = require 'atom'
 SidePane = require './SidePane'
 
+toHtml = (input) ->
+	return input
+		.replace /</g,'&lt;'
+		.replace />/g,'&gt;'
+		.replace /\n/g,'<br />'
+
 module.exports =
 class VariableList extends SidePane
 	getTitle: -> 'Variables'
@@ -81,7 +87,7 @@ class VariableList extends SidePane
 			stringName = variable.name
 			stringType = if variable.type then ' (' + variable.type + ') ' else null
 			stringValue = if variable.value then variable.value else null
-			title = if stringName and (stringType or stringValue) then "<strong>#{stringName}</strong>" + stringType + (if stringValue then (if stringName then ': ' else '') + (stringValue.replace /\n/g,'<br />') else '') else null
+			title = if stringName and (stringType or stringValue) then "<strong>#{toHtml stringName}</strong>" + (toHtml stringType) + (if stringValue then (if stringName then ': ' else '') + (toHtml stringValue) else '') else null
 
 			listItem = null
 
