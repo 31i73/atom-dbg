@@ -190,10 +190,10 @@ To create a dbg provider provide a `dbgProvider` service with the following prop
 >>> `showWarning(warning:String)` - Display the specified warning  
 >>> `showError(error:String)` - Display the specified error  
 
-`getVariableChildren(name):Promise<Variable[]>` - *Optional*. If any variables are marked as `expandable` this function may be called to retrieve them  
-It will be passed the full dot-seperated path of the variable  
+`getVariableChildren(fullName):Promise<Variable[]>` - *Optional*. If any variables are marked as `expandable` this function may be called to retrieve them  
 It should return a promise that fulfills an array of child variables, also with the following properties:
 > `name` - The name of the variable  
+> `fullName` - *Optional*. The full pathed name of the variable, for use on successive `getVariableChildren` queries. If omitted, the parents fullName followed by a dot followed by this name will be used  
 > `type` - *Optional*. The type of the variable (as a String)  
 > `value` - *Optional*. The value of the variable (as a String)  
 > `expandable` - *Optional*. If `true` this variable may contain child properties. If expanded by the user `getVariableChildren()` will again be called to retrieve them

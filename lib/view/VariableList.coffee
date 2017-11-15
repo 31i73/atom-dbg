@@ -113,11 +113,11 @@ class VariableList extends SidePane
 						loader.classList.add 'loading', 'loading-spinner-tiny', 'inline-block', 'debug-fadein'
 						loaderItem.appendChild loader
 
-						@bugger.activeBugger?.getVariableChildren name
+						@bugger.activeBugger?.getVariableChildren variable.fullName or name
 							.then (children) =>
 								branch.removeChild loaderItem
 								for child in children
-									addItem branch, name+'.'+child.name, child
+									addItem branch, child.fullName or name+'.'+child.name, child
 							, =>
 								branch.removeChild loaderItem
 
