@@ -83,6 +83,11 @@ class VariableList extends SidePane
 		while @variableList.firstChild
 			@variableList.removeChild @variableList.firstChild
 
+		selectItem = (item) =>
+			for sibling in @variableList.querySelectorAll '.selected'
+				if sibling!=item then sibling.classList.remove 'selected'
+			item.classList.add 'selected'
+
 		addItem = (list, variable) =>
 			stringName = variable.name
 			stringType = if variable.type then ' (' + variable.type + ') ' else null
@@ -98,6 +103,7 @@ class VariableList extends SidePane
 
 				listItem = document.createElement 'div'
 				listItem.classList.add 'list-item'
+				listItem.addEventListener 'mousedown', -> selectItem tree
 				listItem.addEventListener 'click', =>
 					tree.classList.toggle 'collapsed'
 					if branch.childNodes.length<1
@@ -130,6 +136,7 @@ class VariableList extends SidePane
 			else
 				listItem = document.createElement 'li'
 				listItem.classList.add 'list-item'
+				listItem.addEventListener 'mousedown', -> selectItem listItem
 				list.appendChild listItem
 
 			if title
