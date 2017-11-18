@@ -83,7 +83,7 @@ class VariableList extends SidePane
 		while @variableList.firstChild
 			@variableList.removeChild @variableList.firstChild
 
-		addItem = (list, name, variable) =>
+		addItem = (list, variable) =>
 			stringName = variable.name
 			stringType = if variable.type then ' (' + variable.type + ') ' else null
 			stringValue = if variable.value then variable.value else null
@@ -113,11 +113,12 @@ class VariableList extends SidePane
 						loader.classList.add 'loading', 'loading-spinner-tiny', 'inline-block', 'debug-fadein'
 						loaderItem.appendChild loader
 
-						@bugger.activeBugger?.getVariableChildren variable.fullName or name
+						@bugger.activeBugger?.getVariableChildren variable.fullName
 							.then (children) =>
 								branch.removeChild loaderItem
 								for child in children
-									addItem branch, child.fullName or name+'.'+child.name, child
+									if !child.fullName then child.fullName = variable.fullName+'.'+child.name
+									addItem branch, child
 							, =>
 								branch.removeChild loaderItem
 
@@ -161,4 +162,5 @@ class VariableList extends SidePane
 				item.appendChild text
 
 		for variable in variables
-			addItem @variableList, variable.name, variable
+			if !variable.fullName then variable.fullName = variable.name
+			addItem @variableList, variable
