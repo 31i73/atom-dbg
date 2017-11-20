@@ -305,9 +305,17 @@ module.exports = Debug =
 		for editor in atom.workspace.getTextEditors()
 			if editor.getPath() == path
 				@installTextEditor editor
+				
 				gutter = editor.gutterWithName 'debug-gutter'
+
 				marker = editor.markBufferRange [[line-1, 0], [line-1, 0]]
-				gutter.decorateMarker marker,
+				marker.onDidChange (event) =>
+					@activeBugger?.removeBreakpoint breakpoint
+					breakpoint.line = event.newHeadBufferPosition.row+1
+					@activeBugger?.addBreakpoint breakpoint
+					@breakpointList.updateBreakpoints @breakpoints
+
+				decoration = gutter.decorateMarker marker,
 					type: 'line-number'
 					'class': 'debug-breakpoint'
 				markers.push marker
