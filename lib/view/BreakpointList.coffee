@@ -47,20 +47,15 @@ class BreakpointList extends SidePane
 		@table = document.createElement 'table'
 		bodyInner.appendChild @table
 
-		@tableHead = document.createElement 'thead'
-		@table.appendChild @tableHead
-
-		row = document.createElement 'tr'
-		@tableHead.appendChild row
-
-		col = document.createElement 'th'
-		col.textContent = 'Filename'
-		row.appendChild col
-
-		col = document.createElement 'th'
-		col.textContent = 'Line'
-		col.style.textAlign = 'right'
-		row.appendChild col
+		# @tableHead = document.createElement 'thead'
+		# @table.appendChild @tableHead
+        #
+		# row = document.createElement 'tr'
+		# @tableHead.appendChild row
+        #
+		# col = document.createElement 'th'
+		# col.textContent = 'Location'
+		# row.appendChild col
 
 		@tableBody = document.createElement 'tbody'
 		@table.appendChild @tableBody
@@ -96,21 +91,22 @@ class BreakpointList extends SidePane
 				row.addEventListener 'click', => gotoBreakpoint row, breakpoint, false
 				row.addEventListener 'dblclick', => gotoBreakpoint row, breakpoint, true
 
-			path = atom.project.relativizePath breakpoint.path
+			filename = atom.project.relativizePath breakpoint.path
 
 			col = document.createElement 'td'
 			row.appendChild col
 
-			text = document.createElement 'span'
-			text.textContent = path[1]
-			col.appendChild text
+			path = document.createElement 'span'
+			path.classList.add 'path'
+			col.appendChild path
 
-			col = document.createElement 'td'
-			col.style.textAlign = 'right'
-			row.appendChild col
+			icon = document.createElement 'span'
+			icon.classList.add 'icon', 'icon-file-text'
+			path.appendChild icon
 
 			text = document.createElement 'span'
-			text.textContent = breakpoint.line
-			col.appendChild text
+			text.classList.add 'filepath'
+			text.textContent = filename[1] + ':' + breakpoint.line
+			path.appendChild text
 
 		@table.style.display = if @tableBody.children.length==0 then 'none' else ''
