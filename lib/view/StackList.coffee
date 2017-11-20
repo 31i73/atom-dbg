@@ -65,11 +65,15 @@ class StackList extends SidePane
 		body.classList.add 'body'
 		@element.appendChild body
 
+		bodyInner = document.createElement 'div'
+		bodyInner.classList.add 'inner'
+		body.appendChild bodyInner
+
 		if !toolbar
 			@element.appendChild options
 
 		stackListTable = document.createElement 'table'
-		body.appendChild stackListTable
+		bodyInner.appendChild stackListTable
 
 		@stackListTBody = document.createElement 'tbody'
 		stackListTable.appendChild @stackListTBody

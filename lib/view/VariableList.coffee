@@ -59,12 +59,16 @@ class VariableList extends SidePane
 		body.classList.add 'body'
 		@element.appendChild body
 
+		bodyInner = document.createElement 'div'
+		bodyInner.classList.add 'inner'
+		body.appendChild bodyInner
+
 		if !toolbar
 			@element.appendChild options
 
 		@variableList = document.createElement 'ul'
 		@variableList.classList.add 'list-tree', 'has-collapsable-children', 'variable-list'
-		body.appendChild @variableList
+		bodyInner.appendChild @variableList
 
 		@expandedVariables = {}
 

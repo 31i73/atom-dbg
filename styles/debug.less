@@ -107,11 +107,15 @@ atom-text-editor.editor {
 	> .body {
 		flex: 1 1;
 		overflow: auto;
-		padding-left: @component-padding;
-		padding-right: @component-padding;
 
-		> ul {
-			width: min-content;
+		> .inner {
+			position: relative;
+			padding-left: @component-padding;
+			padding-right: @component-padding;
+
+			> ul {
+				width: min-content;
+			}
 		}
 	}
 

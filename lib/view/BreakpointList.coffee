@@ -40,8 +40,12 @@ class BreakpointList extends SidePane
 		body.classList.add 'body'
 		@element.appendChild body
 
+		bodyInner = document.createElement 'div'
+		bodyInner.classList.add 'inner'
+		body.appendChild bodyInner
+
 		@table = document.createElement 'table'
-		body.appendChild @table
+		bodyInner.appendChild @table
 
 		@tableHead = document.createElement 'thead'
 		@table.appendChild @tableHead
