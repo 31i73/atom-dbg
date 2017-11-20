@@ -121,6 +121,7 @@ class StackList extends SidePane
 			cellLocation.appendChild text
 
 			cellPath = document.createElement 'td'
+			cellPath.style.textAlign = 'right'
 			listRow.appendChild cellPath
 
 			path = document.createElement 'span'
